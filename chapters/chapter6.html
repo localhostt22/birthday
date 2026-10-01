@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chapter VI — The Beginning</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: #050505;
+        color: #f4f1eb;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* =========================
+       MAIN CHAPTER
+    ========================= */
+
+    .chapter {
+        min-height: 100vh;
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 80px 7vw;
+
+        overflow: hidden;
+        text-align: center;
+
+        background:
+            radial-gradient(
+                circle at center,
+                rgba(255,255,255,.045),
+                transparent 38%
+            ),
+            linear-gradient(
+                120deg,
+                #050505 0%,
+                #090909 55%,
+                #050505 100%
+            );
+    }
+
+    .chapter::before,
+    .final::before {
+        content: "";
+
+        position: absolute;
+        inset: 0;
+
+        pointer-events: none;
+
+        opacity: .035;
+
+        background-image:
+            radial-gradient(
+                rgba(255,255,255,.18) .5px,
+                transparent .5px
+            );
+
+        background-size: 5px 5px;
+    }
+
+    .content {
+        position: relative;
+        z-index: 2;
+
+        max-width: 760px;
+        width: 100%;
+    }
+
+    /* =========================
+       TEXT
+    ========================= */
+
+    .chapter-number {
+        font-size: 11px;
+        letter-spacing: 7px;
+
+        color: #a7b0b8;
+
+        text-transform: uppercase;
+
+        margin-bottom: 28px;
+    }
+
+    .eyebrow {
+        font-size: 11px;
+        letter-spacing: 6px;
+
+        color: #aeb8c2;
+
+        text-transform: uppercase;
+
+        margin-bottom: 28px;
+    }
+
+    h1 {
+        font-family: Georgia, "Times New Roman", serif;
+
+        font-size: clamp(58px, 8vw, 105px);
+
+        line-height: .92;
+
+        font-weight: 400;
+
+        letter-spacing: -4px;
+
+        margin-bottom: 45px;
+    }
+
+    .intro {
+        max-width: 650px;
+
+        margin: 0 auto 25px;
+
+        color: #a8a8a8;
+
+        font-size: 15px;
+
+        line-height: 2;
+    }
+
+    /* =========================
+       ONE LAST THING BUTTON
+    ========================= */
+
+    .reveal-button {
+        display: inline-flex;
+
+        margin-top: 45px;
+
+        padding: 14px 22px;
+
+        border: 1px solid rgba(255,255,255,.25);
+
+        background: transparent;
+
+        color: #e8e8e8;
+
+        text-decoration: none;
+
+        font-size: 10px;
+
+        letter-spacing: 4px;
+
+        text-transform: uppercase;
+
+        cursor: pointer;
+
+        transition:
+            .3s ease;
+
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .reveal-button:hover {
+        border-color: rgba(255,255,255,.65);
+
+        background: rgba(255,255,255,.06);
+
+        transform: translateY(-2px);
+    }
+
+    /* =========================
+       FINAL SECTION
+       HIDDEN INITIALLY
+    ========================= */
+
+    .final {
+        min-height: 100vh;
+
+        position: relative;
+
+        display: none;
+
+        align-items: center;
+        justify-content: center;
+
+        text-align: center;
+
+        padding: 90px 7vw;
+
+        overflow: hidden;
+
+        background:
+            radial-gradient(
+                circle at center,
+                #151515 0%,
+                #070707 52%,
+                #030303 100%
+            );
+    }
+
+    .final.show {
+        display: flex;
+
+        animation: finalReveal 1.2s ease forwards;
+    }
+
+    @keyframes finalReveal {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .final-content {
+        position: relative;
+
+        z-index: 2;
+
+        max-width: 850px;
+
+        width: 100%;
+    }
+
+    /* =========================
+       FINAL TEXT
+    ========================= */
+
+    .final-small {
+        font-size: 10px;
+
+        letter-spacing: 7px;
+
+        color: #9ea8b1;
+
+        text-transform: uppercase;
+
+        margin-bottom: 35px;
+    }
+
+    .final h2 {
+        font-family: Georgia, "Times New Roman", serif;
+
+        font-weight: 400;
+
+        font-size: clamp(58px, 9vw, 130px);
+
+        line-height: .92;
+
+        letter-spacing: -4px;
+
+        margin-bottom: 40px;
+    }
+
+    .final-message {
+        color: #aaa;
+
+        font-size: 16px;
+
+        line-height: 2;
+
+        max-width: 620px;
+
+        margin: 0 auto;
+    }
+
+    .love {
+        margin-top: 55px;
+
+        font-family: Georgia, "Times New Roman", serif;
+
+        font-size: clamp(30px, 4vw, 48px);
+
+        color: #f2eee8;
+    }
+
+    .end {
+        margin-top: 55px;
+
+        font-size: 9px;
+
+        letter-spacing: 5px;
+
+        color: #777;
+
+        text-transform: uppercase;
+    }
+
+    .restart {
+        display: inline-block;
+
+        margin-top: 30px;
+
+        color: #aaa;
+
+        text-decoration: none;
+
+        font-size: 9px;
+
+        letter-spacing: 3px;
+
+        text-transform: uppercase;
+
+        border-bottom: 1px solid #555;
+
+        padding-bottom: 5px;
+
+        transition: .25s;
+    }
+
+    .restart:hover {
+        color: white;
+
+        border-color: white;
+    }
+
+    /* =========================
+       FADE ANIMATIONS
+    ========================= */
+
+    .fade {
+        opacity: 0;
+
+        transform: translateY(22px);
+
+        animation: reveal 1s ease forwards;
+    }
+
+    .delay1 {
+        animation-delay: .2s;
+    }
+
+    .delay2 {
+        animation-delay: .45s;
+    }
+
+    .delay3 {
+        animation-delay: .7s;
+    }
+
+    .delay4 {
+        animation-delay: .95s;
+    }
+
+    @keyframes reveal {
+        to {
+            opacity: 1;
+
+            transform: translateY(0);
+        }
+    }
+
+    /* =========================
+       FINAL REVEAL ANIMATION
+    ========================= */
+
+    .final.show .final-small {
+        animation: reveal 1s ease .2s forwards;
+
+        opacity: 0;
+    }
+
+    .final.show h2 {
+        animation: reveal 1s ease .45s forwards;
+
+        opacity: 0;
+    }
+
+    .final.show .final-message {
+        animation: reveal 1s ease .7s forwards;
+
+        opacity: 0;
+    }
+
+    .final.show .love {
+        animation: reveal 1s ease .95s forwards;
+
+        opacity: 0;
+    }
+
+    .final.show .end {
+        animation: reveal 1s ease 1.2s forwards;
+
+        opacity: 0;
+    }
+
+    .final.show .restart {
+        animation: reveal 1s ease 1.4s forwards;
+
+        opacity: 0;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        .chapter,
+        .final {
+            padding: 60px 7vw;
+        }
+
+        h1 {
+            letter-spacing: -2px;
+        }
+
+        .intro,
+        .final-message {
+            font-size: 14px;
+        }
+
+        .final h2 {
+            letter-spacing: -2px;
+        }
+
+        .reveal-button {
+            margin-top: 30px;
+        }
+    }
+</style>
+</head>
+
+
+<body>
+
+<!-- =====================================================
+     CHAPTER VI
+===================================================== -->
+
+<section class="chapter">
+
+    <div class="content">
+
+        <div class="chapter-number fade">
+            CHAPTER VI
+        </div>
+
+        <div class="eyebrow fade delay1">
+            THE BEGINNING
+        </div>
+
+        <h1 class="fade delay2">
+            Because some stories<br>
+            aren't meant to end.
+        </h1>
+
+        <p class="intro fade delay3">
+            They are meant to continue.
+        </p>
+
+        <p class="intro fade delay3">
+            We've already made so many memories — the planned ones,
+            the completely random ones, the little moments that didn't
+            seem important at the time but somehow became the ones
+            worth remembering.
+        </p>
+
+        <p class="intro fade delay4">
+            And if I could choose one thing for all the chapters ahead,
+            I'd choose to keep making them with you.
+        </p>
+
+        <!--
+            THIS IS THE ONLY BUTTON.
+
+            The birthday section below is completely hidden
+            until this button is clicked.
+        -->
+
+        <button
+            class="reveal-button fade delay4"
+            id="lastThingButton"
+            onclick="revealFinal()"
+        >
+            ONE LAST THING ↓
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL / BIRTHDAY SECTION
+
+     HIDDEN UNTIL BUTTON IS CLICKED
+===================================================== -->
+
+<section class="final" id="final">
+
+    <div class="final-content">
+
+        <div class="final-small">
+            AND ONE LAST THING
+        </div>
+
+        <h2>
+            Happy Birthday,<br>
+            beautiful. ❤️
+        </h2>
+
+        <p class="final-message">
+            Thank you for becoming one of the most beautiful parts
+            of my story. I don't know what every chapter ahead will
+            look like, but I know I want to be there for them.
+        </p>
+
+        <div class="love">
+            I love you. ❤️
+        </div>
+
+        <div class="end">
+            THE END... FOR NOW.
+        </div>
+
+        <a
+            class="restart"
+            href="../index.html"
+        >
+            ↺ Start the story again
+        </a>
+
+    </div>
+
+</section>
+
+
+<script>
+
+function revealFinal() {
+
+    const finalSection =
+        document.getElementById("final");
+
+    const button =
+        document.getElementById("lastThingButton");
+
+    /*
+        Prevent the button from being clicked
+        multiple times.
+    */
+
+    button.disabled = true;
+
+    /*
+        Hide the button after clicking.
+    */
+
+    button.style.opacity = "0";
+    button.style.pointerEvents = "none";
+
+    /*
+        Reveal the birthday section.
+    */
+
+    finalSection.classList.add("show");
+
+    /*
+        Scroll smoothly to the birthday section.
+    */
+
+    setTimeout(() => {
+
+        finalSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }, 100);
+
+}
+
+</script>
+
+</body>
+</html>
