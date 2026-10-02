@@ -2,12 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Chapter III — And Then There Was Us</title>
 
@@ -15,7 +12,7 @@
 
         /* =========================
            RESET
-        ========================== */
+        ========================= */
 
         * {
             margin: 0;
@@ -23,645 +20,635 @@
             box-sizing: border-box;
         }
 
-
-        /* =========================
-           BODY
-        ========================== */
+        html,
+        body {
+            background: #000;
+        }
 
         body {
             width: 100%;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
-
-            background: #000;
-            color: #fff;
-
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
+            color: #f3eee6;
+            font-family: Georgia, "Times New Roman", serif;
         }
 
 
         /* =========================
-           CHAPTER
-        ========================== */
+           THE THEATRE
+        ========================= */
 
-        .chapter {
+        .film {
+            --bar: clamp(36px, 9vh, 110px);   /* letterbox bar height */
+            --sepia: 0.28;                    /* colour grade, changes per memory */
+
             position: relative;
-
             width: 100%;
             height: 100vh;
-
+            height: 100dvh;
             overflow: hidden;
-
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    #211d1d 0%,
-                    #0d0b0b 55%,
-                    #000 100%
-                );
+            background: radial-gradient(ellipse at center, #1c1c1c 0%, #0c0c0c 55%, #000 100%);
         }
+
+        .film.leaving { pointer-events: none; }
 
 
         /* =========================
-           BACKGROUND
-        ========================== */
+           ATMOSPHERE
+           A blurred copy of the photo
+           fills the screen behind it.
+        ========================= */
 
-        .background-image {
+        .backdrop {
             position: absolute;
-
             inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
 
+        .bgi {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
-
             object-fit: cover;
-
-            filter:
-                brightness(0.30)
-                saturate(0.65)
-                contrast(1.05)
-                blur(2px);
-
-            transform: scale(1.06);
-
+            transform: scale(1.2) translate(calc(var(--px, 0) * -14px), calc(var(--py, 0) * -9px));
+            filter: blur(40px) brightness(0.42) saturate(0.7);
             opacity: 0;
-
-            transition:
-                opacity 1.8s ease,
-                transform 8s ease;
+            transition: opacity 2.4s ease, transform 1.4s ease-out;
         }
 
-
-        .background-image.visible {
-            opacity: 0.40;
-
-            transform: scale(1.02);
-        }
-
-
-        /* =========================
-           DARK OVERLAY
-        ========================== */
+        .film.m-photo .bgi { opacity: 0.6; }
 
         .darkness {
             position: absolute;
-
             inset: 0;
-
             z-index: 2;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(0,0,0,0.86) 0%,
-                    rgba(0,0,0,0.52) 42%,
-                    rgba(0,0,0,0.18) 72%,
-                    rgba(0,0,0,0.62) 100%
-                );
+            pointer-events: none;
+            background: linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.82) 0%,
+                rgba(0, 0, 0, 0.48) 45%,
+                rgba(0, 0, 0, 0.18) 75%,
+                rgba(0, 0, 0, 0.58) 100%
+            );
         }
-
-
-        /* =========================
-           BOTTOM FADE
-        ========================== */
 
         .bottom-fade {
             position: absolute;
-
             left: 0;
             right: 0;
             bottom: 0;
-
-            height: 45%;
-
+            height: 42%;
             z-index: 3;
-
-            background:
-                linear-gradient(
-                    to top,
-                    rgba(0,0,0,0.94),
-                    transparent
-                );
+            pointer-events: none;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
         }
 
-
-        /* =========================
-           VIGNETTE
-        ========================== */
-
-        .vignette {
+        .dust {
             position: absolute;
-
             inset: 0;
-
-            z-index: 10;
-
-            pointer-events: none;
-
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    transparent 28%,
-                    rgba(0,0,0,0.82) 100%
-                );
-        }
-
-
-        /* =========================
-           GRAIN
-        ========================== */
-
-        .grain {
-            position: absolute;
-
-            width: 200%;
-            height: 200%;
-
-            left: -50%;
-            top: -50%;
-
-            z-index: 30;
-
-            pointer-events: none;
-
-            opacity: 0.055;
-
-            background-image:
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-
-            animation:
-                grainMove 0.25s steps(2) infinite;
-        }
-
-
-        @keyframes grainMove {
-
-            0% {
-                transform: translate(0,0);
-            }
-
-            25% {
-                transform: translate(-2%,2%);
-            }
-
-            50% {
-                transform: translate(2%,-2%);
-            }
-
-            75% {
-                transform: translate(1%,3%);
-            }
-
-            100% {
-                transform: translate(-2%,-1%);
-            }
-        }
-
-
-        /* =========================
-           CHAPTER NUMBER
-        ========================== */
-
-        .chapter-number {
-            position: absolute;
-
-            top: 52px;
-            left: 7%;
-
-            z-index: 20;
-
-            font-family: Arial, sans-serif;
-
-            font-size: 10px;
-
-            letter-spacing: 6px;
-
-            color:
-                rgba(255,255,255,0.62);
-        }
-
-
-        /* =========================
-           CONTENT
-        ========================== */
-
-        .content {
-            position: relative;
-
-            z-index: 15;
-
             width: 100%;
             height: 100%;
-
-            display: flex;
-
-            align-items: center;
-
-            padding-left: 7%;
-            padding-right: 7%;
+            z-index: 4;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 4s ease;
+            mix-blend-mode: screen;
         }
+
+        .film.running .dust { opacity: 1; }
 
 
         /* =========================
-           TEXT
-        ========================== */
+           THE PHOTOGRAPH
+           Same frame as before: same
+           size, same position, same
+           crop. Only the way it
+           arrives has changed.
+           .camera = mouse parallax
+        ========================= */
 
-        .text {
-            width: 48%;
-
-            padding-top: 30px;
-        }
-
-
-        .eyebrow {
-            font-family: Arial, sans-serif;
-
-            font-size: 10px;
-
-            letter-spacing: 6px;
-
-            color:
-                rgba(255,255,255,0.58);
-
-            margin-bottom: 28px;
-
-            opacity: 0;
-
-            transform: translateY(20px);
-
-            transition:
-                opacity 1s ease,
-                transform 1s ease;
-        }
-
-
-        h1 {
-            font-size:
-                clamp(45px, 6vw, 78px);
-
-            font-weight: 400;
-
-            line-height: 1;
-
-            letter-spacing: -2px;
-
-            max-width: 680px;
-
-            opacity: 0;
-
-            transform: translateY(30px);
-
-            transition:
-                opacity 1.2s ease,
-                transform 1.2s ease;
-        }
-
-
-        .description {
-            margin-top: 34px;
-
-            max-width: 520px;
-
-            font-family: Arial, sans-serif;
-
-            font-size: 13px;
-
-            line-height: 1.85;
-
-            color:
-                rgba(255,255,255,0.60);
-
-            opacity: 0;
-
-            transform: translateY(20px);
-
-            transition:
-                opacity 1.2s ease,
-                transform 1.2s ease;
-        }
-
-
-        .description.second {
-            margin-top: 18px;
-
-            color:
-                rgba(255,255,255,0.42);
-        }
-
-
-        /* =========================
-           SIDE TEXT
-        ========================== */
-
-        .side-text {
+        .camera {
             position: absolute;
-
-            right: 7%;
-
-            /*
-             * Moved upward so it never
-             * overlaps the CONTINUE button.
-             */
-            bottom: 15%;
-
-            z-index: 16;
-
-            max-width: 260px;
-
-            text-align: right;
-
-            font-family: Arial, sans-serif;
-
-            font-size: 10px;
-
-            line-height: 1.9;
-
-            letter-spacing: 2px;
-
-            text-transform: uppercase;
-
-            color:
-                rgba(255,255,255,0.42);
-
-            opacity: 0;
-
-            transition:
-                opacity 1.2s ease;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            transform: translate(calc(var(--px, 0) * 8px), calc(var(--py, 0) * 5px));
+            transition: transform 1.2s ease-out;
         }
-
-
-        /* =========================
-           PHOTO
-        ========================== */
 
         .photo {
             position: absolute;
-
-            z-index: 14;
-
             right: 25%;
-
             top: 50%;
-
-            width:
-                min(31vw, 390px);
-
-            height:
-                min(72vh, 620px);
-
+            width: min(31vw, 390px);
+            height: min(72vh, 620px);
             overflow: hidden;
-
-            transform:
-                translate(50%, -50%)
-                scale(0.94);
-
+            transform: translate(50%, -50%);
             opacity: 0;
-
-            transition:
-                opacity 1.6s ease,
-                transform 1.8s ease;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+            transition: opacity 2.2s ease;
         }
 
-
-        .photo.visible {
+        .film.m-photo .photo {
             opacity: 1;
-
-            transform:
-                translate(50%, -50%)
-                scale(1);
+            animation: push 12s linear forwards;      /* slow camera push-in */
         }
 
+        @keyframes push {
+            from { transform: translate(50%, -50%) scale(1); }
+            to   { transform: translate(50%, -50%) scale(1.035); }
+        }
 
         .photo img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
-
             display: block;
+            /* the focus pull: soft -> sharp */
+            filter: brightness(0.82) contrast(1.04) saturate(0.82) sepia(var(--sepia)) blur(14px);
+            transition: filter 3.5s ease;
+        }
 
-            border: none;
-            outline: none;
-
-            filter:
-                brightness(0.82)
-                contrast(1.04)
-                saturate(0.88);
+        .film.m-photo .photo img {
+            filter: brightness(0.82) contrast(1.04) saturate(0.82) sepia(var(--sepia)) blur(0);
         }
 
 
         /* =========================
-           ACTIVE STATE
-        ========================== */
+           LIGHT AND DARK
+        ========================= */
 
-        .content.active .eyebrow {
-            opacity: 1;
-
-            transform: translateY(0);
-        }
-
-
-        .content.active h1 {
-            opacity: 1;
-
-            transform: translateY(0);
-        }
-
-
-        .content.active .description {
-            opacity: 1;
-
-            transform: translateY(0);
-        }
-
-
-        .content.active .side-text {
-            opacity: 1;
-        }
-
-
-        /* =========================
-           CHANGING
-        ========================== */
-
-        .changing .eyebrow,
-        .changing h1,
-        .changing .description,
-        .changing .side-text {
-
-            opacity: 0;
-
-            transform:
-                translateY(20px);
-        }
-
-
-        .changing .photo {
-
-            opacity: 0;
-
-            transform:
-                translate(50%, -50%)
-                scale(0.94);
-        }
-
-
-        /* =========================
-           CONTINUE BUTTON
-           HIDDEN BY DEFAULT
-        ========================== */
-
-        .continue-button {
-
+        .vignette {
             position: absolute;
-
-            right: 7%;
-
-            /*
-             * Clearly below side text.
-             */
-            bottom: 5%;
-
-            z-index: 25;
-
-            padding:
-                15px 32px;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.35);
-
-            color:
-                rgba(255,255,255,0.82);
-
-            text-decoration: none;
-
-            font-family:
-                Arial,
-                sans-serif;
-
-            font-size: 10px;
-
-            font-weight: 500;
-
-            letter-spacing: 5px;
-
-            background:
-                rgba(0,0,0,0.20);
-
-            opacity: 0;
-
-            visibility: hidden;
-
+            inset: 0;
+            z-index: 6;
             pointer-events: none;
-
-            transform:
-                translateY(10px);
-
-            transition:
-                opacity 0.8s ease,
-                visibility 0.8s ease,
-                background 0.4s ease,
-                border-color 0.4s ease,
-                color 0.4s ease,
-                transform 0.4s ease;
+            background: radial-gradient(
+                ellipse at center,
+                transparent 30%,
+                rgba(0, 0, 0, 0.82) 100%
+            );
         }
 
 
         /* =========================
-           FINAL MEMORY
-        ========================== */
+           LETTERBOX
+        ========================= */
 
-        .continue-button.visible {
+        .bar {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: calc(50% + 1px);
+            background: #000;
+            z-index: 7;
+            pointer-events: none;
+            transition: height 3.2s cubic-bezier(0.65, 0, 0.35, 1);
+        }
 
-            opacity: 1;
+        .bar.top    { top: 0; }
+        .bar.bottom { bottom: 0; }
 
-            visibility: visible;
+        .film.open .bar { height: var(--bar); }
 
-            pointer-events: auto;
-
-            transform:
-                translateY(0);
+        .film.leaving .bar {
+            height: calc(50% + 1px);
+            transition-duration: 1.6s;
         }
 
 
-        .continue-button:hover {
+        /* =========================
+           EFFECTS
+        ========================= */
 
+        .streak {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            margin-top: -1px;
+            z-index: 9;
+            pointer-events: none;
+            opacity: 0;
+            transform: scaleX(0);
+            mix-blend-mode: screen;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(150, 190, 255, 0) 5%,
+                rgba(195, 218, 255, 0.95) 50%,
+                rgba(150, 190, 255, 0) 95%,
+                transparent 100%
+            );
+            box-shadow: 0 0 18px 4px rgba(140, 180, 255, 0.45);
+        }
+
+        .streak.fire { animation: streak 1.6s ease-out forwards; }
+
+        @keyframes streak {
+            0%   { opacity: 0; transform: scaleX(0); }
+            30%  { opacity: 1; }
+            60%  { opacity: 0.8; transform: scaleX(1); }
+            100% { opacity: 0; transform: scaleX(1.1); }
+        }
+
+        .leak {
+            position: absolute;
+            inset: -10%;
+            z-index: 9;
+            pointer-events: none;
+            opacity: 0;
+            mix-blend-mode: screen;
             background:
-                rgba(255,255,255,0.08);
-
-            border-color:
-                rgba(255,255,255,0.75);
-
-            color: white;
-
-            transform:
-                translateY(-3px);
+                radial-gradient(ellipse 60% 80% at 15% 50%, rgba(255, 170, 80, 0.95) 0%, rgba(255, 100, 40, 0.55) 35%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 40% 90%, rgba(255, 210, 150, 0.6), transparent 70%);
         }
+
+        .leak.fire { animation: leak 2.4s ease-in-out forwards; }
+
+        @keyframes leak {
+            0%   { opacity: 0; transform: translateX(-35%); }
+            40%  { opacity: 1; }
+            100% { opacity: 0; transform: translateX(30%); }
+        }
+
+        .flicker {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .film.running.fx-flicker .flicker { animation: flicker 5.3s infinite; }
+
+        @keyframes flicker {
+            0%    { opacity: 0; }
+            4%    { opacity: 0.07; }
+            5%    { opacity: 0; }
+            22%   { opacity: 0.04; }
+            23%   { opacity: 0.09; }
+            24%   { opacity: 0.01; }
+            47%   { opacity: 0; }
+            48%   { opacity: 0.06; }
+            50%   { opacity: 0; }
+            71%   { opacity: 0.05; }
+            72%   { opacity: 0; }
+            88%   { opacity: 0.08; }
+            89.5% { opacity: 0.02; }
+            100%  { opacity: 0; }
+        }
+
+        .grain {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            left: -50%;
+            top: -50%;
+            z-index: 11;
+            pointer-events: none;
+            opacity: 0.08;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            animation: grainMove 0.25s steps(2) infinite;
+        }
+
+        @keyframes grainMove {
+            0%   { transform: translate(0, 0); }
+            25%  { transform: translate(-2%, 2%); }
+            50%  { transform: translate(2%, -2%); }
+            75%  { transform: translate(1%, 3%); }
+            100% { transform: translate(-2%, -1%); }
+        }
+
+
+        /* =========================
+           STORY LAYER
+           The chapter number, the year
+           stamp, the side lines and
+           Continue all live inside the
+           bars, so nothing can overlap
+           the text or the photograph.
+        ========================= */
+
+        .content {
+            position: absolute;
+            inset: 0;
+            z-index: 8;
+            display: flex;
+            align-items: center;
+            padding: var(--bar) 7%;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .film.leaving .content { opacity: 0; }
+
+        /* title strip in the top bar */
+        .chapter-number {
+            position: absolute;
+            top: calc(var(--bar) / 2);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(243, 238, 230, 0.6);
+            opacity: 0;
+            transition: opacity 3s ease, letter-spacing 4s ease;
+        }
+
+        .film.show-chapter .chapter-number {
+            opacity: 1;
+            letter-spacing: 9px;
+        }
+
+        /* year / age stamp in the top bar (optional) */
+        .stamp {
+            position: absolute;
+            top: calc(var(--bar) / 2);
+            left: 7%;
+            transform: translateY(-50%);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(243, 238, 230, 0.45);
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .film.m-eyebrow .stamp { opacity: 1; }
+
+
+        /* =========================
+           TEXT
+        ========================= */
+
+        .text {
+            width: 48%;
+            padding-top: 30px;
+        }
+
+        .eyebrow {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            letter-spacing: 6px;
+            color: rgba(243, 238, 230, 0.58);
+            margin-bottom: 28px;
+        }
+
+        h1 {
+            font-size: clamp(46px, 6vw, 80px);
+            font-weight: 400;
+            line-height: 0.98;
+            letter-spacing: -2px;
+            max-width: 650px;
+            text-shadow: 0 3px 25px rgba(0, 0, 0, 0.75);
+        }
+
+        .description {
+            margin-top: 34px;
+            max-width: 520px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            line-height: 1.8;
+            letter-spacing: 0.3px;
+            color: rgba(243, 238, 230, 0.62);
+        }
+
+        .description.second {
+            margin-top: 18px;
+            color: rgba(243, 238, 230, 0.45);
+        }
+
+        /* every line arrives soft -> sharp */
+        .eyebrow,
+        h1,
+        .description {
+            opacity: 0;
+            transform: translateY(24px);
+            filter: blur(8px);
+            transition: opacity 2.2s ease, transform 2.2s ease, filter 2.2s ease;
+        }
+
+        .film.m-eyebrow .eyebrow,
+        .film.m-title   h1,
+        .film.m-desc    .description:not(.second),
+        .film.m-desc2   .description.second {
+            opacity: 1;
+            transform: none;
+            filter: blur(0);
+        }
+
+
+        /* =========================
+           SIDE TEXT (in the bottom bar)
+        ========================= */
+
+        .side-text {
+            position: absolute;
+            right: 7%;
+            bottom: 0;
+            height: var(--bar);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            max-width: 260px;
+            text-align: right;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            line-height: 1.7;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(243, 238, 230, 0.45);
+            opacity: 0;
+            filter: blur(6px);
+            transition: opacity 2.2s ease, filter 2.2s ease;
+        }
+
+        .film.m-side .side-text {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+
+        /* =========================
+           MEMORY CHANGE
+           Everything fades out quickly
+           under the light leak.
+        ========================= */
+
+        .film.hiding .eyebrow,
+        .film.hiding h1,
+        .film.hiding .description,
+        .film.hiding .side-text,
+        .film.hiding .stamp,
+        .film.hiding .photo,
+        .film.hiding .photo img,
+        .film.hiding .bgi {
+            transition-duration: 0.8s;
+        }
+
+
+        /* =========================
+           FINAL MESSAGE
+        ========================= */
+
+        .final-message {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: min(86%, 820px);
+            transform: translate(-50%, -46%);
+            text-align: center;
+            font-size: clamp(26px, 4.2vw, 54px);
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.25;
+            color: #f3eee6;
+            text-shadow: 0 3px 25px rgba(0, 0, 0, 0.75);
+            opacity: 0;
+            filter: blur(8px);
+            transition: opacity 3s ease, transform 3s ease, filter 3s ease;
+        }
+
+        .film.show-final .final-message {
+            opacity: 1;
+            filter: blur(0);
+            transform: translate(-50%, -50%);
+        }
+
+
+        /* =========================
+           CONTINUE (bottom bar)
+        ========================= */
+
+        .continue-wrap {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: var(--bar);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .next-chapter {
+            display: inline-block;
+            padding: 0 0 6px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(243, 238, 230, 0.35);
+            border-radius: 0;
+            color: rgba(243, 238, 230, 0.75);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition:
+                opacity 2s ease,
+                visibility 0s linear 2s,
+                color 0.4s ease,
+                border-color 0.4s ease;
+        }
+
+        .next-chapter span {
+            display: inline-block;
+            transition: transform 0.4s ease;
+        }
+
+        .film.show-continue .next-chapter {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transition:
+                opacity 2s ease,
+                visibility 0s,
+                color 0.4s ease,
+                border-color 0.4s ease;
+        }
+
+        .next-chapter:hover,
+        .next-chapter:focus-visible {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.8);
+            outline: none;
+        }
+
+        .next-chapter:hover span,
+        .next-chapter:focus-visible span { transform: translateX(6px); }
 
 
         /* =========================
            MOBILE
-        ========================== */
+           The photograph keeps its
+           mobile size and position.
+        ========================= */
 
         @media (max-width: 800px) {
 
             .content {
-
                 padding-left: 8%;
                 padding-right: 8%;
             }
 
-
             .text {
-
                 width: 100%;
-
                 align-self: flex-end;
-
-                padding-bottom: 8%;
+                padding-top: 0;
+                padding-bottom: 16px;
             }
-
 
             h1 {
-
-                font-size:
-                    clamp(40px, 11vw, 64px);
+                font-size: clamp(42px, 11vw, 65px);
             }
 
+            .description {
+                max-width: 430px;
+            }
 
             .photo {
-
                 right: 50%;
-
                 top: 36%;
-
                 width: 48vw;
-
                 height: 52vh;
             }
 
-
             .side-text {
-
                 display: none;
             }
 
-
-            .continue-button {
-
-                right: 8%;
-
-                bottom: 5%;
-
-                padding:
-                    13px 24px;
-
-                font-size: 9px;
+            .stamp {
+                left: 8%;
             }
+
+            .film.show-chapter .chapter-number {
+                letter-spacing: 6px;
+            }
+        }
+
+        @media (max-height: 560px) {
+            .side-text { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .grain { animation: none; }
+
+            .film.m-photo .photo { animation: none; }
         }
 
     </style>
@@ -671,471 +658,434 @@
 
 <body>
 
-<main class="chapter">
+<main class="film" id="film">
 
-
-    <!-- =========================
-         BACKGROUND
-    ========================== -->
-
-    <img
-        id="backgroundImage"
-        class="background-image"
-        src="../assets/photos/chapter3-1.jpg"
-        alt=""
-    >
-
-
-    <div class="darkness"></div>
-
-    <div class="bottom-fade"></div>
-
-
-    <!-- =========================
-         CHAPTER NUMBER
-    ========================== -->
-
-    <div class="chapter-number">
-        CHAPTER III
+    <!-- Blurred atmosphere behind the photograph -->
+    <div class="backdrop" aria-hidden="true">
+        <img id="backgroundImage" class="bgi" src="../assets/photos/chapter3-1.jpg" alt="">
     </div>
 
+    <div class="darkness"></div>
+    <div class="bottom-fade"></div>
 
-    <!-- =========================
-         CONTENT
-    ========================== -->
+    <canvas class="dust" id="dust" aria-hidden="true"></canvas>
 
-    <section
-        id="content"
-        class="content"
-    >
+    <!-- The photograph -->
+    <div class="camera">
+        <div id="photo" class="photo">
+            <img id="photoImage" src="../assets/photos/chapter3-1.jpg" alt="A memory">
+        </div>
+    </div>
 
+    <div class="vignette"></div>
 
-        <!-- =========================
-             STORY TEXT
-        ========================== -->
+    <!-- Letterbox -->
+    <div class="bar top"></div>
+    <div class="bar bottom"></div>
+
+    <!-- Story -->
+    <section id="content" class="content">
+
+        <div class="chapter-number">CHAPTER III</div>
+
+        <!-- optional year / age, filled from the script below -->
+        <div id="stamp" class="stamp"></div>
 
         <div class="text">
 
-            <div
-                id="eyebrow"
-                class="eyebrow"
-            >
+            <div id="eyebrow" class="eyebrow">
                 AND SOMEWHERE ALONG THE WAY
             </div>
-
 
             <h1 id="title">
                 She became someone I wanted to know.
             </h1>
 
-
-            <p
-                id="description"
-                class="description"
-            >
-                Not the little girl from those old photographs anymore.
-                She had become her own person.
+            <p id="description" class="description">
+                Not the little girl from those old photographs
+                anymore. She had become her own person.
             </p>
 
-
-            <p
-                id="description2"
-                class="description second"
-            >
-                And somehow, I wanted to know the person behind that smile.
+            <p id="description2" class="description second">
+                And somehow, I wanted to know the person
+                behind that smile.
             </p>
 
         </div>
 
-
-        <!-- =========================
-             PHOTO
-        ========================== -->
-
-        <div
-            id="photo"
-            class="photo"
-        >
-
-            <img
-                id="photoImage"
-                src="../assets/photos/chapter3-1.jpg"
-                alt="A memory"
-            >
-
-        </div>
-
-
-        <!-- =========================
-             SIDE TEXT
-        ========================== -->
-
-        <div
-            id="sideText"
-            class="side-text"
-        >
+        <div id="sideText" class="side-text">
             HER WORLD.<br>
             HER STORIES.<br>
             AND THEN...
         </div>
 
+        <div id="finalMessage" class="final-message">
+            And that was only<br>
+            the beginning of us.
+        </div>
 
-        <!-- =========================
-             CONTINUE
-             ONLY FINAL MEMORY
-        ========================== -->
-
-        <a
-            href="chapter4.html"
-            id="continueButton"
-            class="continue-button"
-        >
-            CONTINUE
-        </a>
-
+        <div class="continue-wrap">
+            <button id="nextChapter" class="next-chapter" type="button">
+                Continue the story <span>→</span>
+            </button>
+        </div>
 
     </section>
 
-
-    <!-- =========================
-         GRAIN
-    ========================== -->
-
+    <div class="streak" id="streak"></div>
+    <div class="leak" id="leak"></div>
+    <div class="flicker"></div>
     <div class="grain"></div>
-
-
-    <!-- =========================
-         VIGNETTE
-    ========================== -->
-
-    <div class="vignette"></div>
-
 
 </main>
 
 
 <script>
 
-    /* =========================================
-       CHAPTER III — OUR STORY
-    ========================================= */
+(function () {
 
+    /* =========================================
+       CHAPTER III STORY
+       (same words, same photographs as before)
+
+       stamp: an optional year or age shown quietly
+       in the top bar, e.g. "2009" or "AGE 6".
+       Leave it "" to show nothing.
+
+       sepia: how warm the photograph looks.
+       It cools down as she grows up.
+    ========================================= */
 
     const memories = [
 
-        /* =========================
-           MEMORY 1
-        ========================== */
-
         {
-            image:
-                "../assets/photos/chapter3-1.jpg",
-
-            eyebrow:
-                "AND SOMEWHERE ALONG THE WAY",
-
-            title:
-                "She became someone I wanted to know.",
-
-            description:
-                "Not the little girl from those old photographs anymore. She had become her own person.",
-
-            description2:
-                "And somehow, I wanted to know the person behind that smile.",
-
-            side:
-                "HER WORLD.<br>HER STORIES.<br>AND THEN..."
+            image: "../assets/photos/chapter3-1.jpg",
+            stamp: "",
+            sepia: 0,
+            eyebrow: "AND SOMEWHERE ALONG THE WAY",
+            title: "She became someone I wanted to know.",
+            description: "Not the little girl from those old photographs anymore. She had become her own person.",
+            description2: "And somehow, I wanted to know the person behind that smile.",
+            side: "HER WORLD.<br>HER STORIES.<br>AND THEN..."
         },
 
-
-        /* =========================
-           MEMORY 2
-        ========================== */
-
         {
-            image:
-                "../assets/photos/chapter3-2.jpg",
-
-            eyebrow:
-                "A LITTLE CLOSER",
-
-            title:
-                "She had her own little world.",
-
-            description:
-                "Her own stories. Her own chaos. Her own way of making ordinary moments feel different.",
-
-            description2:
-                "And somehow, I wanted to become a part of it.",
-
-            side:
-                "HER LAUGHTER.<br>HER CHAOS.<br>HER WAY OF LIFE."
+            image: "../assets/photos/chapter3-2.jpg",
+            stamp: "",
+            sepia: 0,
+            eyebrow: "A LITTLE CLOSER",
+            title: "She had her own little world.",
+            description: "Her own stories. Her own chaos. Her own way of making ordinary moments feel different.",
+            description2: "And somehow, I wanted to become a part of it.",
+            side: "HER LAUGHTER.<br>HER CHAOS.<br>HER WAY OF LIFE."
         },
 
-
-        /* =========================
-           MEMORY 3 — FINAL
-        ========================== */
-
         {
-            image:
-                "../assets/photos/chapter3-3.jpg",
-
-            eyebrow:
-                "I DIDN'T KNOW IT THEN",
-
-            title:
-                "She was becoming my favorite part of the story.",
-
-            description:
-                "I didn't know where our story would go. I didn't know how many memories we'd make.",
-
-            description2:
-                "I just knew that being around her felt like something worth holding onto.",
-
-            side:
-                "SOME STORIES<br>ARE PLANNED.<br>OURS WASN'T."
+            image: "../assets/photos/chapter3-3.jpg",
+            stamp: "",
+            sepia: 0,
+            eyebrow: "I DIDN'T KNOW IT THEN",
+            title: "She was becoming my favorite part of the story.",
+            description: "I didn't know where our story would go. I didn't know how many memories we'd make.",
+            description2: "I just knew that being around her felt like something worth holding onto.",
+            side: "SOME STORIES<br>ARE PLANNED.<br>OURS WASN'T."
         }
 
     ];
 
 
     /* =========================================
+       EFFECTS — switch any of these off (false)
+    ========================================= */
+
+    const FX = {
+        dust:      true,
+        scratches: true,
+        flicker:   true,
+        leak:      true,
+        streak:    true,
+        parallax:  true
+    };
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) Object.keys(FX).forEach(k => FX[k] = false);
+
+    // while testing: open chapter3.html?fast to play at 4x speed
+    let speed = 1;
+    if (window.location.search.indexOf("fast") !== -1) speed = 0.25;
+
+
+    /* =========================================
        ELEMENTS
-    ========================================== */
+    ========================================= */
 
-    const content =
-        document.getElementById("content");
+    const film            = document.getElementById("film");
+    const backgroundImage = document.getElementById("backgroundImage");
+    const photoImage      = document.getElementById("photoImage");
+    const stamp           = document.getElementById("stamp");
+    const eyebrow         = document.getElementById("eyebrow");
+    const title           = document.getElementById("title");
+    const description     = document.getElementById("description");
+    const description2    = document.getElementById("description2");
+    const sideText        = document.getElementById("sideText");
+    const nextChapter     = document.getElementById("nextChapter");
+    const streak          = document.getElementById("streak");
+    const leak            = document.getElementById("leak");
 
-    const backgroundImage =
-        document.getElementById("backgroundImage");
+    if (FX.flicker) film.classList.add("fx-flicker");
 
-    const photoImage =
-        document.getElementById("photoImage");
+    function at(seconds, fn) {
+        setTimeout(fn, seconds * 1000 * speed);
+    }
 
-    const photo =
-        document.getElementById("photo");
+    function fire(el) {
+        el.classList.remove("fire");
+        void el.offsetWidth;
+        el.classList.add("fire");
+    }
 
-    const eyebrow =
-        document.getElementById("eyebrow");
+    function setMemory(i) {
+        const m = memories[i];
 
-    const title =
-        document.getElementById("title");
+        photoImage.src      = m.image;
+        backgroundImage.src = m.image;
 
-    const description =
-        document.getElementById("description");
+        stamp.textContent    = m.stamp;
+        eyebrow.innerHTML    = m.eyebrow;
+        title.innerHTML      = m.title;
+        description.innerHTML  = m.description;
+        description2.innerHTML = m.description2;
+        sideText.innerHTML   = m.side;
 
-    const description2 =
-        document.getElementById("description2");
+        film.style.setProperty("--sepia", m.sepia);
+    }
 
-    const sideText =
-        document.getElementById("sideText");
+    // load every photograph up front so a change is never a blank frame
+    memories.forEach(function (m) {
+        const img = new Image();
+        img.src = m.image;
+    });
 
-    const continueButton =
-        document.getElementById("continueButton");
-
-
-    let currentMemory = 0;
-
-    let slideshowFinished = false;
+    setMemory(0);
 
 
     /* =========================================
-       CONTINUE BUTTON
-       
-       ONLY SHOW AFTER PHOTO 3
-    ========================================== */
+       DUST
+    ========================================= */
 
-    function updateContinueButton() {
+    function startDust() {
 
-        if (
-            currentMemory === memories.length - 1 &&
-            slideshowFinished
-        ) {
+        const canvas = document.getElementById("dust");
+        const ctx = canvas.getContext("2d");
+        let w = 0, h = 0;
+        const parts = [];
 
-            continueButton.classList.add("visible");
-
-        } else {
-
-            continueButton.classList.remove("visible");
-
+        function resize() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            w = canvas.clientWidth;
+            h = canvas.clientHeight;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
+
+        function make(initial) {
+            return {
+                x: Math.random() * w,
+                y: initial ? Math.random() * h : h + 10,
+                r: 0.4 + Math.random() * 1.6,
+                vx: (Math.random() - 0.5) * 0.12,
+                vy: -(0.03 + Math.random() * 0.16),
+                a: 0.1 + Math.random() * 0.35,
+                p: Math.random() * 6.28,
+                s: 0.4 + Math.random() * 1.2,
+                glow: Math.random() < 0.2
+            };
+        }
+
+        resize();
+        window.addEventListener("resize", resize);
+
+        const count = w < 700 ? 35 : 70;
+        for (let i = 0; i < count; i++) parts.push(make(true));
+
+        function frame(t) {
+            ctx.clearRect(0, 0, w, h);
+
+            for (let i = 0; i < parts.length; i++) {
+                const p = parts[i];
+
+                p.x += p.vx + Math.sin(t / 4000 * p.s + p.p) * 0.05;
+                p.y += p.vy;
+
+                if (p.y < -10) parts[i] = make(false);
+
+                const alpha = p.a * (0.6 + 0.4 * Math.sin(t / 900 * p.s + p.p));
+
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(255, 240, 215, " + alpha + ")";
+
+                if (p.glow) {
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = "rgba(255, 230, 190, 0.6)";
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+
+                ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+                ctx.fill();
+            }
+
+            requestAnimationFrame(frame);
+        }
+
+        requestAnimationFrame(frame);
+    }
+
+    function scratchLoop() {
+        setTimeout(function () {
+
+            const s = document.createElement("div");
+            const tall = 60 + Math.random() * 40;
+
+            s.style.cssText =
+                "position:absolute;z-index:10;pointer-events:none;width:1px;" +
+                "left:" + (Math.random() * 100) + "%;" +
+                "top:" + (Math.random() * (100 - tall)) + "%;" +
+                "height:" + tall + "%;" +
+                "background:rgba(255,255,255," + (0.12 + Math.random() * 0.15) + ");";
+
+            film.appendChild(s);
+            setTimeout(function () { s.remove(); }, 90);
+
+            scratchLoop();
+
+        }, (1500 + Math.random() * 2500) * speed);
+    }
+
+    if (FX.parallax) {
+        window.addEventListener("mousemove", function (e) {
+            film.style.setProperty("--px", (e.clientX / window.innerWidth - 0.5) * 2);
+            film.style.setProperty("--py", (e.clientY / window.innerHeight - 0.5) * 2);
+        });
     }
 
 
     /* =========================================
-       INITIAL REVEAL
-    ========================================== */
+       THE CHAPTER (seconds)
 
-    setTimeout(() => {
+       Each memory:  photo arrives and comes into
+       focus, then the lines arrive one by one,
+       then a light leak carries us to the next.
+    ========================================= */
 
-        content.classList.add("active");
+    // when each memory begins, and how long it stays
+    const START    = [1.4, 11.6, 21.0];
+    const DURATION = [10.0, 9.2, 9.2];
 
-        photo.classList.add("visible");
+    // when its lines arrive, counted from its start
+    const FIRST = { eyebrow: 1.8, title: 2.8, desc: 4.8, desc2: 6.4, side: 7.6 };
+    const LATER = { eyebrow: 0.9, title: 1.9, desc: 3.9, desc2: 5.5, side: 6.6 };
 
-        backgroundImage.classList.add("visible");
-
-        updateContinueButton();
-
-    }, 500);
-
-
-    /* =========================================
-       CHANGE MEMORY
-    ========================================== */
-
-    function changeMemory() {
-
-        /*
-         * IMPORTANT:
-         * If we're already on the final photo,
-         * DO NOT START AGAIN FROM PHOTO 1.
-         */
-
-        if (
-            currentMemory >= memories.length - 1
-        ) {
-
-            slideshowFinished = true;
-
-            updateContinueButton();
-
-            return;
-        }
-
-
-        /*
-         * Fade everything out.
-         */
-
-        content.classList.remove("active");
-
-        photo.classList.remove("visible");
-
-        backgroundImage.classList.remove("visible");
-
-        continueButton.classList.remove("visible");
-
-
-        /*
-         * Wait for fade-out.
-         */
-
-        setTimeout(() => {
-
-
-            /*
-             * Move forward ONE photo only.
-             */
-
-            currentMemory =
-                currentMemory + 1;
-
-
-            const memory =
-                memories[currentMemory];
-
-
-            /*
-             * Change image.
-             */
-
-            photoImage.src =
-                memory.image;
-
-            backgroundImage.src =
-                memory.image;
-
-
-            /*
-             * Change story.
-             */
-
-            eyebrow.innerHTML =
-                memory.eyebrow;
-
-            title.innerHTML =
-                memory.title;
-
-            description.innerHTML =
-                memory.description;
-
-            description2.innerHTML =
-                memory.description2;
-
-            sideText.innerHTML =
-                memory.side;
-
-
-            /*
-             * Reveal new memory.
-             */
-
-            content.classList.add("active");
-
-            photo.classList.add("visible");
-
-            backgroundImage.classList.add("visible");
-
-
-            /*
-             * FINAL PHOTO
-             */
-
-            if (
-                currentMemory === memories.length - 1
-            ) {
-
-                /*
-                 * Give Photo 3 time to appear
-                 * before showing CONTINUE.
-                 */
-
-                setTimeout(() => {
-
-                    slideshowFinished = true;
-
-                    updateContinueButton();
-
-                }, 1800);
-
-            }
-
-
-        }, 900);
-
+    function show(cls, seconds) {
+        at(seconds, function () { film.classList.add(cls); });
     }
 
+    function scheduleMemory(i) {
+
+        const s = START[i];
+        const e = s + DURATION[i];
+        const t = i === 0 ? FIRST : LATER;
+
+        // photograph arrives (the first one is revealed at the start)
+        if (i > 0) {
+            at(s, function () {
+                film.classList.remove("hiding");
+                film.classList.add("m-photo");
+            });
+        }
+
+        show("m-eyebrow", s + t.eyebrow);
+        show("m-title",   s + t.title);
+        show("m-desc",    s + t.desc);
+        show("m-desc2",   s + t.desc2);
+        show("m-side",    s + t.side);
+
+        // light leak carries us out
+        at(e - 1.0, function () {
+            if (FX.leak) fire(leak);
+        });
+
+        // everything fades under the leak
+        at(e - 0.5, function () {
+            film.classList.add("hiding");
+            film.classList.remove("m-photo", "m-eyebrow", "m-title", "m-desc", "m-desc2", "m-side");
+        });
+
+        // while it is hidden, load the next memory
+        at(e, function () {
+            if (i + 1 < memories.length) setMemory(i + 1);
+        });
+    }
+
+    function play() {
+
+        // 0.3   a thin line of light
+        at(0.3, function () { if (FX.streak) fire(streak); });
+
+        // 1.0   the aperture opens
+        at(1.0, function () {
+            film.classList.add("open", "running");
+            if (FX.dust) startDust();
+            if (FX.scratches) scratchLoop();
+        });
+
+        // 1.4   first photograph comes into focus
+        at(START[0], function () { film.classList.add("m-photo"); });
+
+        // 3.4   chapter title in the top bar
+        at(3.4, function () { film.classList.add("show-chapter"); });
+
+        memories.forEach(function (m, i) { scheduleMemory(i); });
+
+        // the final message, alone on black
+        const end = START[2] + DURATION[2];
+
+        at(end + 0.8, function () { film.classList.add("show-final"); });
+        at(end + 5.0, function () { film.classList.add("show-continue"); });
+    }
+
+    // one frame so the starting state is painted first
+    requestAnimationFrame(function () {
+        requestAnimationFrame(play);
+    });
+
 
     /* =========================================
-       EVERY 7 SECONDS
-       
-       STOPS AFTER PHOTO 3
-    ========================================== */
+       GO TO CHAPTER IV
+       light burn, aperture closes
+    ========================================= */
 
-    const slideshow =
-        setInterval(() => {
+    nextChapter.addEventListener("click", function () {
 
-            if (
-                currentMemory >= memories.length - 1
-            ) {
+        if (FX.leak) fire(leak);
+        film.classList.add("leaving");
 
-                clearInterval(slideshow);
+        setTimeout(function () {
+            window.location.href = "chapter4.html";
+        }, 1900);
+    });
 
-                slideshowFinished = true;
+    // coming back with the browser Back button
+    window.addEventListener("pageshow", function (e) {
+        if (e.persisted) film.classList.remove("leaving");
+    });
 
-                updateContinueButton();
-
-                return;
-            }
-
-
-            changeMemory();
-
-        }, 7000);
-
+})();
 
 </script>
+
+<script src="../music.js"></script>
 
 </body>
 
