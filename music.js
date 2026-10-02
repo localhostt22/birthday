@@ -459,9 +459,9 @@
         css.textContent =
             ".bfm{position:fixed;z-index:60;font-family:Arial,Helvetica,sans-serif;font-size:9px;" +
             "letter-spacing:3px;text-transform:uppercase;color:rgba(243,238,230,.42);background:none;" +
-            "border:none;cursor:pointer;padding:6px 2px;transition:color .4s ease,opacity 1.2s ease;opacity:0}" +
+            "border:none;cursor:pointer;padding:6px 2px;transition:color .4s ease,opacity 1.2s ease;opacity:0;pointer-events:none}" +
             ".bfm:hover,.bfm:focus-visible{color:rgba(243,238,230,.9);outline:none}" +
-            ".bfm.show{opacity:1}" +
+            ".bfm.show{opacity:1;pointer-events:auto}" +
             "#bfmMute{top:12px;right:16px}" +
             "#bfmHint{bottom:14px;left:50%;transform:translateX(-50%);color:rgba(243,238,230,.7)}";
         document.head.appendChild(css);
