@@ -2,1223 +2,905 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Chapter IV — Somewhere Along the Way</title>
-
-    <style>
-
-        /* =========================
-           RESET
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-
-        /* =========================
-           BODY
-        ========================= */
-
-        body {
-            width: 100%;
-            height: 100vh;
-
-            overflow: hidden;
-
-            background: #000;
-
-            color: #fff;
-
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-        }
-
-
-        /* =========================
-           CHAPTER
-        ========================= */
-
-        .chapter {
-            position: relative;
-
-            width: 100%;
-            height: 100vh;
-
-            overflow: hidden;
-
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    #211d1d 0%,
-                    #0d0b0b 55%,
-                    #000 100%
-                );
-        }
-
-
-        /* =========================
-           BACKGROUND IMAGE
-        ========================= */
-
-        .background-image {
-            position: absolute;
-
-            inset: 0;
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-
-            filter:
-                brightness(0.30)
-                saturate(0.65)
-                contrast(1.05)
-                blur(2px);
-
-            transform: scale(1.06);
-
-            opacity: 0;
-
-            transition:
-                opacity 1.8s ease,
-                transform 8s ease;
-        }
-
-
-        .background-image.visible {
-            opacity: 0.40;
-
-            transform: scale(1.02);
-        }
-
-
-        /* =========================
-           DARK OVERLAY
-        ========================= */
-
-        .darkness {
-            position: absolute;
-
-            inset: 0;
-
-            z-index: 2;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(0,0,0,0.86) 0%,
-                    rgba(0,0,0,0.52) 42%,
-                    rgba(0,0,0,0.18) 72%,
-                    rgba(0,0,0,0.62) 100%
-                );
-        }
-
-
-        /* =========================
-           BOTTOM FADE
-        ========================= */
-
-        .bottom-fade {
-            position: absolute;
-
-            left: 0;
-            right: 0;
-            bottom: 0;
-
-            height: 45%;
-
-            z-index: 3;
-
-            background:
-                linear-gradient(
-                    to top,
-                    rgba(0,0,0,0.94),
-                    transparent
-                );
-        }
-
-
-        /* =========================
-           VIGNETTE
-        ========================= */
-
-        .vignette {
-            position: absolute;
-
-            inset: 0;
-
-            z-index: 10;
-
-            pointer-events: none;
-
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    transparent 28%,
-                    rgba(0,0,0,0.82) 100%
-                );
-        }
-
-
-        /* =========================
-           GRAIN
-        ========================= */
-
-        .grain {
-            position: absolute;
-
-            width: 200%;
-            height: 200%;
-
-            left: -50%;
-            top: -50%;
-
-            z-index: 30;
-
-            pointer-events: none;
-
-            opacity: 0.055;
-
-            background-image:
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-
-            animation:
-                grainMove 0.25s steps(2) infinite;
-        }
-
-
-        @keyframes grainMove {
-
-            0% {
-                transform: translate(0,0);
-            }
-
-            25% {
-                transform: translate(-2%,2%);
-            }
-
-            50% {
-                transform: translate(2%,-2%);
-            }
-
-            75% {
-                transform: translate(1%,3%);
-            }
-
-            100% {
-                transform: translate(-2%,-1%);
-            }
-        }
-
-
-        /* =========================
-           CHAPTER NUMBER
-        ========================= */
-
-        .chapter-number {
-            position: absolute;
-
-            top: 52px;
-            left: 7%;
-
-            z-index: 20;
-
-            font-family:
-                Arial,
-                sans-serif;
-
-            font-size: 10px;
-
-            letter-spacing: 6px;
-
-            color:
-                rgba(255,255,255,0.62);
-        }
-
-
-        /* =========================
-           CONTENT
-        ========================= */
-
-        .content {
-            position: relative;
-
-            z-index: 15;
-
-            width: 100%;
-            height: 100%;
-
-            display: flex;
-
-            align-items: center;
-
-            padding-left: 7%;
-            padding-right: 7%;
-        }
-
-
-        /* =========================
-           TEXT
-        ========================= */
-
-        .text {
-            width: 48%;
-
-            padding-top: 30px;
-        }
-
-
-        .eyebrow {
-            font-family:
-                Arial,
-                sans-serif;
-
-            font-size: 10px;
-
-            letter-spacing: 6px;
-
-            color:
-                rgba(255,255,255,0.58);
-
-            margin-bottom: 28px;
-
-            opacity: 0;
-
-            transform:
-                translateY(20px);
-
-            transition:
-                opacity 1s ease,
-                transform 1s ease;
-        }
-
-
-        h1 {
-            font-size:
-                clamp(45px, 6vw, 78px);
-
-            font-weight: 400;
-
-            line-height: 1;
-
-            letter-spacing: -2px;
-
-            max-width: 680px;
-
-            opacity: 0;
-
-            transform:
-                translateY(30px);
-
-            transition:
-                opacity 1.2s ease,
-                transform 1.2s ease;
-        }
-
-
-        .description {
-            margin-top: 34px;
-
-            max-width: 520px;
-
-            font-family:
-                Arial,
-                sans-serif;
-
-            font-size: 13px;
-
-            line-height: 1.85;
-
-            color:
-                rgba(255,255,255,0.60);
-
-            opacity: 0;
-
-            transform:
-                translateY(20px);
-
-            transition:
-                opacity 1.2s ease,
-                transform 1.2s ease;
-        }
-
-
-        .description.second {
-            margin-top: 18px;
-
-            color:
-                rgba(255,255,255,0.42);
-        }
-
-
-        /* =========================
-           SIDE TEXT
-           
-           MOVED UP
-           SO IT NEVER TOUCHES BUTTON
-        ========================= */
-
-        .side-text {
-            position: absolute;
-
-            right: 7%;
-
-            /*
-                IMPORTANT FIX:
-
-                Previously this was 8%.
-                Now it is 16%, leaving
-                a dedicated area below
-                for the Continue button.
-            */
-
-            bottom: 16%;
-
-            z-index: 16;
-
-            max-width: 260px;
-
-            text-align: right;
-
-            font-family:
-                Arial,
-                sans-serif;
-
-            font-size: 10px;
-
-            line-height: 1.9;
-
-            letter-spacing: 2px;
-
-            text-transform: uppercase;
-
-            color:
-                rgba(255,255,255,0.42);
-
-            opacity: 0;
-
-            transition:
-                opacity 1.2s ease;
-        }
-
-
-        /* =========================
-           PHOTO
-        ========================= */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter IV — The Little Moments</title>
+
+<style>
+
+    /* =====================================================
+       CHAPTER IV — THE PEAK
+       Everything before this was dark and quiet.
+       Here the film opens up: light, colour, lift.
+    ===================================================== */
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { background: #000; }
+
+    body {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        color: #fff6ea;
+        font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .film {
+        --cx: 75%;          /* where the photograph sits (rays + glow centre) */
+        --cy: 50%;
+
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        background: #1b0c33;
+    }
+
+    .film.leaving { pointer-events: none; }
+
+
+    /* ---- the sunrise ---- */
+
+    .sky {
+        position: absolute;
+        inset: -4%;
+        z-index: 0;
+        background: radial-gradient(ellipse at 72% 45%,
+            #ffb067 0%, #ff6f6f 26%, #e8478a 46%, #8a3aa8 72%, #2a1250 100%);
+        animation: drift 16s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+        from { filter: hue-rotate(-16deg) saturate(1.05); transform: scale(1); }
+        to   { filter: hue-rotate(14deg)  saturate(1.25); transform: scale(1.06); }
+    }
+
+    .bgi {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: blur(60px) brightness(1.15) saturate(1.5);
+        transform: scale(1.3);
+        mix-blend-mode: soft-light;
+        opacity: 0;
+        transition: opacity 1.6s ease;
+    }
+
+    .film.lit .bgi { opacity: 0.85; }
+
+    .rays {
+        position: absolute;
+        z-index: 2;
+        left: var(--cx);
+        top: var(--cy);
+        width: 240vmax;
+        height: 240vmax;
+        margin: -120vmax 0 0 -120vmax;
+        pointer-events: none;
+        mix-blend-mode: screen;
+        opacity: 0;
+        transition: opacity 2.4s ease;
+        background: repeating-conic-gradient(from 0deg,
+            rgba(255, 238, 190, 0.20) 0deg 5deg, transparent 5deg 16deg);
+        -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 42%);
+                mask-image: radial-gradient(circle, #000 0%, transparent 42%);
+        animation: spin 80s linear infinite;
+    }
+
+    .film.lit .rays { opacity: 1; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .glow {
+        position: absolute;
+        z-index: 2;
+        left: var(--cx);
+        top: var(--cy);
+        width: 90vmin;
+        height: 90vmin;
+        margin: -45vmin 0 0 -45vmin;
+        pointer-events: none;
+        mix-blend-mode: screen;
+        opacity: 0;
+        background: radial-gradient(circle, rgba(255, 214, 140, 0.75) 0%, rgba(255, 150, 120, 0.3) 40%, transparent 70%);
+        transition: opacity 1.6s ease;
+        animation: pulse 3.2s ease-in-out infinite;
+    }
+
+    .film.lit .glow { opacity: 1; }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50%      { transform: scale(1.14); }
+    }
+
+    .shade {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        background:
+            linear-gradient(90deg, rgba(28, 6, 52, 0.62) 0%, rgba(28, 6, 52, 0.22) 45%, transparent 70%),
+            radial-gradient(ellipse at center, transparent 55%, rgba(30, 0, 40, 0.4) 100%);
+    }
+
+    #fx {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 6;
+        pointer-events: none;
+    }
+
+
+    /* ---- the photograph (a happy little print) ---- */
+
+    .photo {
+        --sc: 1;
+        --rot: 0deg;
+
+        position: absolute;
+        z-index: 5;
+        right: 25%;
+        top: 50%;
+        width: min(31vw, 390px);
+        height: min(72vh, 620px);
+        padding: 10px;
+        background: #fff6ea;
+        transform: translate(50%, -50%) rotate(var(--rot)) scale(var(--sc));
+        opacity: 0;
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.4),
+            0 30px 80px rgba(70, 0, 70, 0.45),
+            0 0 100px rgba(255, 196, 120, 0.6);
+        transition:
+            transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+            opacity 0.5s ease;
+    }
+
+    .photo.pre  { --sc: 0.78; --rot: 5deg;  transition: none; }
+    .photo.show { opacity: 1; }
+    .photo.out  { --sc: 0.86; --rot: -5deg; opacity: 0; transition-duration: 0.45s; }
+
+    .float {
+        width: 100%;
+        height: 100%;
+        animation: bob 5s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50%      { transform: translateY(-9px) rotate(0.7deg); }
+    }
+
+    .float img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: brightness(1.05) contrast(1.03) saturate(1.2);
+    }
+
+
+    /* ---- arrival: the drum-roll photo, handed over ---- */
+
+    .black {
+        position: fixed;
+        inset: 0;
+        z-index: 39;
+        background: #000;
+        transition: opacity 1.1s ease;
+    }
+
+    .arrive {
+        position: fixed;
+        z-index: 40;
+        overflow: hidden;
+        background: #000;
+    }
+
+    .arrive img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .flash {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        background: #fff;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .flash.go  { animation: flash 1s ease-out forwards; }
+    .flash.soft { animation: flashSoft 0.7s ease-out forwards; }
+    .flash.leave { opacity: 1; transition: opacity 0.9s ease-in; }
+
+    @keyframes flash     { 0% { opacity: 0.95; } 100% { opacity: 0; } }
+    @keyframes flashSoft { 0% { opacity: 0.4; }  100% { opacity: 0; } }
+
+
+    /* ---- the story ---- */
+
+    .content {
+        position: relative;
+        z-index: 7;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 7%;
+        pointer-events: none;
+    }
+
+    .chapter-number {
+        position: absolute;
+        top: 48px;
+        left: 7%;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        letter-spacing: 6px;
+        color: rgba(255, 246, 234, 0.8);
+    }
+
+    .text { width: 48%; padding-bottom: 11vh; }
+
+    .pop {
+        opacity: 0;
+        transform: translateY(26px) scale(0.96);
+        transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .eyebrow {
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        letter-spacing: 6px;
+        color: #ffe6b8;
+        margin-bottom: 26px;
+    }
+
+    h1 {
+        font-size: clamp(42px, 5.6vw, 74px);
+        font-weight: 400;
+        line-height: 1.03;
+        letter-spacing: -1.5px;
+        max-width: 680px;
+        text-shadow: 0 0 34px rgba(255, 196, 120, 0.55), 0 4px 30px rgba(70, 0, 60, 0.45);
+    }
+
+    .w {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(0.7em) scale(0.88);
+        filter: blur(6px);
+        transition:
+            opacity 0.6s ease calc(var(--i) * 0.08s),
+            transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--i) * 0.08s),
+            filter 0.6s ease calc(var(--i) * 0.08s);
+    }
+
+    .description {
+        margin-top: 30px;
+        max-width: 520px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.85;
+        color: rgba(255, 246, 234, 0.9);
+        text-shadow: 0 2px 16px rgba(60, 0, 60, 0.5);
+    }
+
+    .description.second { margin-top: 16px; color: rgba(255, 246, 234, 0.74); }
+
+    .side-text {
+        position: absolute;
+        left: 7%;
+        bottom: 6%;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        line-height: 1.95;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #ffe6b8;
+    }
+
+    .film.t-eyebrow .eyebrow,
+    .film.t-desc .description:not(.second),
+    .film.t-desc2 .description.second,
+    .film.t-side .side-text { opacity: 1; transform: none; }
+
+    .film.t-title .w { opacity: 1; transform: none; filter: none; }
+
+    .film.swapping .w,
+    .film.swapping .pop { transition-delay: 0s; transition-duration: 0.3s; }
+
+
+    /* ---- continue ---- */
+
+    .continue-wrap {
+        position: absolute;
+        right: 7%;
+        bottom: 6%;
+        pointer-events: none;
+    }
+
+    .next-chapter {
+        padding: 16px 34px;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        color: #fff6ea;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 246, 234, 0.7);
+        border-radius: 40px;
+        -webkit-backdrop-filter: blur(6px);
+                backdrop-filter: blur(6px);
+        box-shadow: 0 0 30px rgba(255, 196, 120, 0.35);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(14px) scale(0.94);
+        transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    visibility 0s linear 0.9s, background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .film.t-continue .next-chapter {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+        transition-delay: 0s;
+        animation: beat 2.4s ease-in-out 1s infinite;
+    }
+
+    @keyframes beat {
+        0%, 100% { box-shadow: 0 0 26px rgba(255, 196, 120, 0.3); }
+        50%      { box-shadow: 0 0 46px rgba(255, 196, 120, 0.75); }
+    }
+
+    .next-chapter:hover,
+    .next-chapter:focus-visible { background: rgba(255, 255, 255, 0.26); outline: none; }
+
+    .next-chapter span { display: inline-block; transition: transform 0.4s ease; }
+    .next-chapter:hover span { transform: translateX(6px); }
+
+
+    /* ---- phones ---- */
+
+    @media (max-width: 800px) {
+
+        .film { --cx: 50%; --cy: 33%; }
+
+        .content { padding: 0 8%; }
+        .chapter-number { top: 28px; }
+
+        .text { width: 100%; align-self: flex-end; padding-bottom: 14%; }
 
         .photo {
-            position: absolute;
-
-            z-index: 14;
-
-            right: 25%;
-
-            top: 50%;
-
-            width:
-                min(31vw, 390px);
-
-            height:
-                min(72vh, 620px);
-
-            overflow: hidden;
-
-            transform:
-                translate(50%, -50%)
-                scale(0.94);
-
-            opacity: 0;
-
-            transition:
-                opacity 1.6s ease,
-                transform 1.8s ease;
+            right: 50%;
+            top: 33%;
+            width: 52vw;
+            height: 42vh;
         }
 
-
-        .photo.visible {
-            opacity: 1;
-
-            transform:
-                translate(50%, -50%)
-                scale(1);
-        }
-
-
-        .photo img {
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-
-            display: block;
-
-            filter:
-                brightness(0.82)
-                contrast(1.04)
-                saturate(0.88);
-
-            border: none;
-            outline: none;
-        }
-
-
-        /* =========================
-           ACTIVE STATE
-        ========================= */
-
-        .content.active .eyebrow {
-            opacity: 1;
-
-            transform:
-                translateY(0);
-        }
-
-
-        .content.active h1 {
-            opacity: 1;
-
-            transform:
-                translateY(0);
-        }
-
-
-        .content.active .description {
-            opacity: 1;
-
-            transform:
-                translateY(0);
-        }
-
-
-        .content.active .side-text {
-            opacity: 1;
-        }
-
-
-        /* =========================
-           CHANGING STATE
-        ========================= */
-
-        .changing .eyebrow,
-        .changing h1,
-        .changing .description,
-        .changing .side-text {
-
-            opacity: 0;
-
-            transform:
-                translateY(20px);
-        }
-
-
-        .changing .photo {
-
-            opacity: 0;
-
-            transform:
-                translate(50%, -50%)
-                scale(0.94);
-        }
-
-
-        /* =========================
-           CONTINUE BUTTON
-           
-           ONLY PHOTO 3
-        ========================= */
-
-        .continue-button {
-
-            position: absolute;
-
-            /*
-                Dedicated bottom area.
-                This cannot overlap
-                the side text anymore.
-            */
-
-            right: 7%;
-            bottom: 4%;
-
-            z-index: 25;
-
-            padding:
-                14px 30px;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.35);
-
-            color:
-                rgba(255,255,255,0.82);
-
-            text-decoration: none;
-
-            font-family:
-                Arial,
-                sans-serif;
-
-            font-size: 10px;
-
-            font-weight: 500;
-
-            letter-spacing: 5px;
-
-            background:
-                rgba(0,0,0,0.20);
-
-            opacity: 0;
-
-            visibility: hidden;
-
-            pointer-events: none;
-
-            transform:
-                translateY(10px);
-
-            transition:
-                opacity 0.8s ease,
-                visibility 0.8s ease,
-                background 0.4s ease,
-                border-color 0.4s ease,
-                color 0.4s ease,
-                transform 0.4s ease;
-        }
-
-
-        /* =========================
-           SHOW CONTINUE
-        ========================= */
-
-        .continue-button.visible {
-
-            opacity: 1;
-
-            visibility: visible;
-
-            pointer-events: auto;
-
-            transform:
-                translateY(0);
-        }
-
-
-        .continue-button:hover {
-
-            background:
-                rgba(255,255,255,0.08);
-
-            border-color:
-                rgba(255,255,255,0.75);
-
-            color: white;
-
-            transform:
-                translateY(-3px);
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 800px) {
-
-            .content {
-
-                padding-left: 8%;
-                padding-right: 8%;
-            }
-
-
-            .text {
-
-                width: 100%;
-
-                align-self: flex-end;
-
-                padding-bottom: 14%;
-            }
-
-
-            h1 {
-
-                font-size:
-                    clamp(40px, 11vw, 64px);
-            }
-
-
-            .photo {
-
-                right: 50%;
-
-                top: 36%;
-
-                width: 48vw;
-
-                height: 52vh;
-            }
-
-
-            .side-text {
-
-                display: none;
-            }
-
-
-            .continue-button {
-
-                right: 8%;
-
-                bottom: 5%;
-
-                padding:
-                    13px 24px;
-
-                font-size: 9px;
-            }
-        }
-
-    </style>
-
+        h1 { font-size: clamp(34px, 9.5vw, 54px); }
+        .description { font-size: 13px; margin-top: 18px; }
+        .description.second { margin-top: 10px; }
+        .side-text { display: none; }
+        .continue-wrap { right: 8%; bottom: 3%; }
+        .next-chapter { padding: 13px 24px; font-size: 9px; }
+    }
+
+    @media (max-height: 600px) {
+        .side-text { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .sky, .rays, .glow, .float { animation: none; }
+    }
+
+</style>
 </head>
 
 
 <body>
 
-<main class="chapter">
+<main class="film" id="film">
 
+    <div class="sky"></div>
+    <img id="bgi" class="bgi" src="../assets/photos/chapter4-1.jpg" alt="">
+    <div class="rays"></div>
+    <div class="glow"></div>
+    <div class="shade"></div>
 
-    <!-- =========================
-         BACKGROUND
-    ========================= -->
-
-    <img
-        id="backgroundImage"
-        class="background-image"
-        src="../assets/photos/chapter4-1.jpg"
-        alt=""
-    >
-
-
-    <div class="darkness"></div>
-
-    <div class="bottom-fade"></div>
-
-
-    <!-- =========================
-         CHAPTER NUMBER
-    ========================= -->
-
-    <div class="chapter-number">
-        CHAPTER IV
+    <div id="photo" class="photo">
+        <div class="float">
+            <img id="photoImage" src="../assets/photos/chapter4-1.jpg" alt="A memory">
+        </div>
     </div>
 
+    <canvas id="fx" aria-hidden="true"></canvas>
 
-    <!-- =========================
-         CONTENT
-    ========================= -->
+    <section class="content">
 
-    <section
-        id="content"
-        class="content"
-    >
-
-
-        <!-- =========================
-             STORY TEXT
-        ========================= -->
+        <div class="chapter-number">CHAPTER IV</div>
 
         <div class="text">
-
-            <div
-                id="eyebrow"
-                class="eyebrow"
-            >
-                THE LITTLE MOMENTS
-            </div>
-
-
-            <h1 id="title">
-                Somewhere along the way, it became us.
-            </h1>
-
-
-            <p
-                id="description"
-                class="description"
-            >
-                It wasn't always one big moment. Sometimes it was simply the way you smiled, the way you looked at me, and the little things that slowly started meaning more.
-            </p>
-
-
-            <p
-                id="description2"
-                class="description second"
-            >
-                Without even realizing it, you became someone I wanted to keep close.
-            </p>
-
+            <div id="eyebrow" class="eyebrow pop"></div>
+            <h1 id="title"></h1>
+            <p id="description" class="description pop"></p>
+            <p id="description2" class="description second pop"></p>
         </div>
 
+        <div id="sideText" class="side-text pop"></div>
 
-        <!-- =========================
-             PHOTO
-        ========================= -->
-
-        <div
-            id="photo"
-            class="photo"
-        >
-
-            <img
-                id="photoImage"
-                src="../assets/photos/chapter4-1.jpg"
-                alt="A memory"
-            >
-
+        <div class="continue-wrap">
+            <button id="nextChapter" class="next-chapter" type="button">
+                Continue to Chapter V <span>→</span>
+            </button>
         </div>
-
-
-        <!-- =========================
-             SIDE TEXT
-        ========================= -->
-
-        <div
-            id="sideText"
-            class="side-text"
-        >
-            SMALL MOMENTS.<br>
-            SOFT SMILES.<br>
-            SOMETHING REAL.
-        </div>
-
-
-        <!-- =========================
-             CONTINUE TO CHAPTER V
-
-             HIDDEN UNTIL PHOTO 3
-        ========================= -->
-
-        <a
-            href="chapter5.html"
-            id="continueButton"
-            class="continue-button"
-        >
-            CONTINUE
-        </a>
-
 
     </section>
 
-
-    <!-- =========================
-         GRAIN
-    ========================= -->
-
-    <div class="grain"></div>
-
-
-    <!-- =========================
-         VIGNETTE
-    ========================= -->
-
-    <div class="vignette"></div>
-
+    <!-- the drum-roll photograph, handed over from Chapter III -->
+    <div class="black" id="black"></div>
+    <div class="arrive" id="arrive"><img id="arriveImg" alt=""></div>
+    <div class="flash" id="flash"></div>
 
 </main>
 
 
 <script>
 
+(function () {
 
     /* =========================================
-       CHAPTER IV — IT BECAME US
+       CHAPTER IV — THE LITTLE MOMENTS
+       (same words, same photographs)
     ========================================= */
-
 
     const memories = [
 
-        /* =========================
-           PHOTO 1
-        ========================= */
-
         {
-
-            image:
-                "../assets/photos/chapter4-1.jpg",
-
-            eyebrow:
-                "THE LITTLE MOMENTS",
-
-            title:
-                "Somewhere along the way, it became us.",
-
-            description:
-                "It wasn't always one big moment. Sometimes it was simply the way you smiled, the way you looked at me, and the little things that slowly started meaning more.",
-
-            description2:
-                "Without even realizing it, you became someone I wanted to keep close.",
-
-            side:
-                "SMALL MOMENTS.<br>SOFT SMILES.<br>SOMETHING REAL."
+            image: "../assets/photos/chapter4-1.jpg",
+            eyebrow: "THE LITTLE MOMENTS",
+            title: "Somewhere along the way, it became us.",
+            description: "It wasn't always one big moment. Sometimes it was simply the way you smiled, the way you looked at me, and the little things that slowly started meaning more.",
+            description2: "Without even realizing it, you became someone I wanted to keep close.",
+            side: "SMALL MOMENTS.<br>SOFT SMILES.<br>SOMETHING REAL."
         },
 
-
-        /* =========================
-           PHOTO 2 — SINHAGAD
-        ========================= */
-
         {
-
-            image:
-                "../assets/photos/chapter4-2.jpg",
-
-            eyebrow:
-                "OUR FIRST TRIP TO SINHAGAD",
-
-            title:
-                "Then we started making memories together.",
-
-            description:
-                "Our first trip to Sinhagad after we started dating wasn't just another day out. It was one of the first times it really felt like we were building a story of our own.",
-
-            description2:
-                "Just two people, somewhere away from everything, enjoying the beginning of us.",
-
-            side:
-                "OUR FIRST TRIP.<br>OUR FIRST ADVENTURE.<br>JUST US."
+            image: "../assets/photos/chapter4-2.jpg",
+            eyebrow: "OUR FIRST TRIP TO SINHAGAD",
+            title: "Then we started making memories together.",
+            description: "Our first trip to Sinhagad after we started dating wasn't just another day out. It was one of the first times it really felt like we were building a story of our own.",
+            description2: "Just two people, somewhere away from everything, enjoying the beginning of us.",
+            side: "OUR FIRST TRIP.<br>OUR FIRST ADVENTURE.<br>JUST US."
         },
 
-
-        /* =========================
-           PHOTO 3 — FINAL YEAR
-        ========================= */
-
         {
-
-            image:
-                "../assets/photos/chapter4-3.jpg",
-
-            eyebrow:
-                "THE YEARS WE MADE",
-
-            title:
-                "We learned how to have fun together.",
-
-            description:
-                "By our final year of college, there were already so many memories behind us — the trips, the random days, the laughter, and all the moments that made college feel different because you were there.",
-
-            description2:
-                "We didn't know those ordinary days would become some of the memories we'd want to keep forever.",
-
-            side:
-                "COLLEGE ENDED.<br>THE MEMORIES DIDN'T.<br>AND NEITHER DID WE."
+            image: "../assets/photos/chapter4-3.jpg",
+            eyebrow: "THE YEARS WE MADE",
+            title: "We learned how to have fun together.",
+            description: "By our final year of college, there were already so many memories behind us — the trips, the random days, the laughter, and all the moments that made college feel different because you were there.",
+            description2: "We didn't know those ordinary days would become some of the memories we'd want to keep forever.",
+            side: "COLLEGE ENDED.<br>THE MEMORIES DIDN'T.<br>AND NEITHER DID WE."
         }
 
     ];
 
+    // when each memory begins (seconds)
+    const START = [0.3, 10.2, 19.8];
 
-    /* =========================================
-       ELEMENTS
-    ========================================= */
+    // set any of these to false for a calmer chapter
+    const FX = { particles: true, sound: true };
 
-    const content =
-        document.getElementById("content");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) FX.particles = false;
 
+    // open chapter4.html?fast while testing (4x speed)
+    const sp = window.location.search.indexOf("fast") !== -1 ? 0.25 : 1;
 
-    const backgroundImage =
-        document.getElementById("backgroundImage");
+    const film   = document.getElementById("film");
+    const photo  = document.getElementById("photo");
+    const photoImage = document.getElementById("photoImage");
+    const bgi    = document.getElementById("bgi");
+    const eyebrow = document.getElementById("eyebrow");
+    const title  = document.getElementById("title");
+    const desc   = document.getElementById("description");
+    const desc2  = document.getElementById("description2");
+    const side   = document.getElementById("sideText");
+    const next   = document.getElementById("nextChapter");
+    const flash  = document.getElementById("flash");
+    const black  = document.getElementById("black");
+    const arrive = document.getElementById("arrive");
+    const arriveImg = document.getElementById("arriveImg");
 
+    const M = window.BirthdayMusic;
 
-    const photoImage =
-        document.getElementById("photoImage");
+    function at(s, fn) { setTimeout(fn, s * 1000 * sp); }
+    function cls(c) { film.classList.add(c); }
 
-
-    const photo =
-        document.getElementById("photo");
-
-
-    const eyebrow =
-        document.getElementById("eyebrow");
-
-
-    const title =
-        document.getElementById("title");
-
-
-    const description =
-        document.getElementById("description");
-
-
-    const description2 =
-        document.getElementById("description2");
-
-
-    const sideText =
-        document.getElementById("sideText");
-
-
-    const continueButton =
-        document.getElementById("continueButton");
-
-
-    let currentMemory = 0;
-
-    let memoryTimer;
-
-
-    /* =========================================
-       SHOW / HIDE CONTINUE BUTTON
-
-       BUTTON ONLY EXISTS ON PHOTO 3
-    ========================================= */
-
-    function updateContinueButton() {
-
-        if (
-            currentMemory ===
-            memories.length - 1
-        ) {
-
-            continueButton.classList.add(
-                "visible"
-            );
-
-        } else {
-
-            continueButton.classList.remove(
-                "visible"
-            );
-
-        }
-
+    function fire(el, c) {
+        el.classList.remove("go", "soft");
+        void el.offsetWidth;
+        el.classList.add(c);
     }
 
 
     /* =========================================
-       INITIAL REVEAL
+       LIGHT: sparkles, bokeh, bursts, confetti
     ========================================= */
 
-    setTimeout(() => {
+    const cv = document.getElementById("fx");
+    const cx = cv.getContext("2d");
+    let W = 0, H = 0;
+    const P = [];
 
-        content.classList.add(
-            "active"
-        );
+    function size() {
+        const d = Math.min(window.devicePixelRatio || 1, 2);
+        W = cv.clientWidth;
+        H = cv.clientHeight;
+        cv.width = W * d;
+        cv.height = H * d;
+        cx.setTransform(d, 0, 0, d, 0, 0);
+    }
 
-        photo.classList.add(
-            "visible"
-        );
+    size();
+    window.addEventListener("resize", size);
 
-        backgroundImage.classList.add(
-            "visible"
-        );
+    const HUES = [38, 46, 330, 18, 52];
+    const rnd = Math.random;
+    const pick = a => a[(rnd() * a.length) | 0];
 
-        updateContinueButton();
+    function bokeh(init) {
+        return { k: "b", x: rnd() * W, y: init ? rnd() * H : H + 90, r: 18 + rnd() * 70,
+                 vx: (rnd() - 0.5) * 8, vy: -(10 + rnd() * 24), a: 0.05 + rnd() * 0.13, h: pick(HUES) };
+    }
 
-    }, 500);
+    function spark(init) {
+        return { k: "s", x: rnd() * W, y: init ? rnd() * H : H + 10, r: 1 + rnd() * 2.2,
+                 vx: (rnd() - 0.5) * 14, vy: -(24 + rnd() * 70), ph: rnd() * 6.3, s: 2 + rnd() * 4 };
+    }
 
-
-    /* =========================================
-       CHANGE MEMORY
-    ========================================= */
-
-    function changeMemory() {
-
-
-        /*
-            IMPORTANT:
-
-            If we are already on
-            PHOTO 3, STOP.
-
-            There is NO loop back
-            to PHOTO 1.
-        */
-
-        if (
-            currentMemory >=
-            memories.length - 1
-        ) {
-
-            clearInterval(
-                memoryTimer
-            );
-
-            updateContinueButton();
-
-            return;
+    function burst(x, y, n, power) {
+        if (!FX.particles) return;
+        for (let i = 0; i < n; i++) {
+            const a = rnd() * 6.2832;
+            const v = power * (0.25 + rnd() * 0.95);
+            P.push({ k: "p", x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 20,
+                     r: 1.4 + rnd() * 3.2, life: 1, d: 0.3 + rnd() * 0.5, h: pick(HUES), w: rnd() < 0.3 });
         }
+    }
 
+    function confetti(n) {
+        if (!FX.particles) return;
+        for (let i = 0; i < n; i++) {
+            P.push({ k: "c", x: rnd() * W, y: -20 - rnd() * H * 0.4, vx: (rnd() - 0.5) * 70, vy: 90 + rnd() * 160,
+                     rot: rnd() * 6.28, vr: (rnd() - 0.5) * 9, w: 6 + rnd() * 7, h: 10 + rnd() * 9,
+                     c: pick(["#ffd27a", "#ff8fb8", "#fff3d6", "#ffb067", "#c9a4ff", "#ffffff"]), ph: rnd() * 6 });
+        }
+    }
 
-        /*
-            Fade everything out.
-        */
+    if (FX.particles) {
+        const nb = W < 700 ? 10 : 22, ns = W < 700 ? 34 : 70;
+        for (let i = 0; i < nb; i++) P.push(bokeh(true));
+        for (let i = 0; i < ns; i++) P.push(spark(true));
+    }
 
-        content.classList.remove(
-            "active"
-        );
+    let last = performance.now();
 
+    function frame(now) {
 
-        photo.classList.remove(
-            "visible"
-        );
+        const dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
 
+        cx.clearRect(0, 0, W, H);
 
-        backgroundImage.classList.remove(
-            "visible"
-        );
+        for (let i = P.length - 1; i >= 0; i--) {
+            const p = P[i];
 
-
-        /*
-            Hide Continue while
-            changing photos.
-        */
-
-        continueButton.classList.remove(
-            "visible"
-        );
-
-
-        /*
-            Wait for fade-out.
-        */
-
-        setTimeout(() => {
-
-
-            /*
-                Move to next photo.
-
-                IMPORTANT:
-                NO modulo operator.
-
-                This prevents:
-
-                PHOTO 3
-                   ↓
-                PHOTO 1
-            */
-
-            currentMemory =
-                currentMemory + 1;
-
-
-            const memory =
-                memories[currentMemory];
-
-
-            /*
-                Change image.
-            */
-
-            photoImage.src =
-                memory.image;
-
-
-            backgroundImage.src =
-                memory.image;
-
-
-            /*
-                Change story.
-            */
-
-            eyebrow.innerHTML =
-                memory.eyebrow;
-
-
-            title.innerHTML =
-                memory.title;
-
-
-            description.innerHTML =
-                memory.description;
-
-
-            description2.innerHTML =
-                memory.description2;
-
-
-            sideText.innerHTML =
-                memory.side;
-
-
-            /*
-                Reveal new memory.
-            */
-
-            content.classList.add(
-                "active"
-            );
-
-
-            photo.classList.add(
-                "visible"
-            );
-
-
-            backgroundImage.classList.add(
-                "visible"
-            );
-
-
-            /*
-                Show Continue ONLY
-                on final photo.
-            */
-
-            updateContinueButton();
-
-
-            /*
-                Stop timer after
-                Photo 3.
-            */
-
-            if (
-                currentMemory ===
-                memories.length - 1
-            ) {
-
-                clearInterval(
-                    memoryTimer
-                );
-
+            if (p.k === "b") {
+                p.x += p.vx * dt; p.y += p.vy * dt;
+                if (p.y < -p.r) { P[i] = bokeh(false); continue; }
+                cx.globalCompositeOperation = "lighter";
+                const g = cx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+                g.addColorStop(0, "hsla(" + p.h + ",100%,75%," + p.a + ")");
+                g.addColorStop(1, "hsla(" + p.h + ",100%,60%,0)");
+                cx.fillStyle = g;
+                cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 6.2832); cx.fill();
             }
 
-        }, 900);
+            else if (p.k === "s") {
+                p.x += p.vx * dt; p.y += p.vy * dt;
+                if (p.y < -10) { P[i] = spark(false); continue; }
+                const tw = 0.5 + 0.5 * Math.sin(now / 1000 * p.s + p.ph);
+                cx.globalCompositeOperation = "lighter";
+                cx.fillStyle = "rgba(255,236,190," + (0.25 + 0.65 * tw) + ")";
+                cx.beginPath(); cx.arc(p.x, p.y, p.r * (0.7 + tw * 0.6), 0, 6.2832); cx.fill();
+            }
 
+            else if (p.k === "p") {
+                p.vx *= 1 - 0.9 * dt; p.vy *= 1 - 0.9 * dt; p.vy -= 26 * dt;   // they drift UP
+                p.x += p.vx * dt; p.y += p.vy * dt;
+                p.life -= p.d * dt;
+                if (p.life <= 0) { P.splice(i, 1); continue; }
+                cx.globalCompositeOperation = "lighter";
+                cx.fillStyle = p.w ? "rgba(255,255,255," + p.life + ")"
+                                   : "hsla(" + p.h + ",100%,68%," + p.life + ")";
+                cx.beginPath(); cx.arc(p.x, p.y, p.r * (0.5 + p.life), 0, 6.2832); cx.fill();
+            }
+
+            else {
+                p.x += (p.vx + Math.sin(now / 600 + p.ph) * 30) * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+                if (p.y > H + 30) { P.splice(i, 1); continue; }
+                cx.globalCompositeOperation = "source-over";
+                cx.save();
+                cx.translate(p.x, p.y); cx.rotate(p.rot); cx.scale(1, Math.abs(Math.sin(p.rot * 1.3)) * 0.8 + 0.2);
+                cx.fillStyle = p.c;
+                cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                cx.restore();
+            }
+        }
+
+        requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+
+    function photoCentre() {
+        const r = photo.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
     }
 
 
     /* =========================================
-       START AUTOMATIC MEMORY CHANGES
-
-       7 SECONDS PER PHOTO
+       SOUND: little bells that climb higher
+       (the music itself comes from music.js)
     ========================================= */
 
-    memoryTimer = setInterval(
-        changeMemory,
-        7000
-    );
+    let AC = null;
 
+    function chime(base, ratios) {
+
+        if (!FX.sound) return;
+
+        try {
+            const st = JSON.parse(sessionStorage.getItem("bf_music_v1"));
+            if (st && st.muted) return;
+        } catch (e) {}
+
+        try {
+            if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+
+            const asked = performance.now();
+
+            const go = function () {
+                if (AC.state !== "running" || performance.now() - asked > 500) return;
+                const t = AC.currentTime + 0.03;
+                ratios.forEach(function (r, i) { bell(base * r, t + i * 0.075); });
+            };
+
+            if (AC.state === "suspended") AC.resume().then(go).catch(function () {});
+            else go();
+        } catch (e) {}
+    }
+
+    function bell(f, t) {
+        [[1, 0.09], [2.003, 0.035], [3.01, 0.015]].forEach(function (pr) {
+            const o = AC.createOscillator(), g = AC.createGain();
+            o.type = "sine";
+            o.frequency.value = f * pr[0];
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.linearRampToValueAtTime(pr[1], t + 0.006);
+            g.gain.exponentialRampToValueAtTime(0.0004, t + 1.5);
+            o.connect(g); g.connect(AC.destination);
+            o.start(t); o.stop(t + 1.6);
+        });
+    }
+
+    const UP = [1, 1.25, 1.5, 2, 2.5, 3, 4];     // a bright major arpeggio
+
+
+    /* =========================================
+       WORDS
+    ========================================= */
+
+    function setMemory(m) {
+        eyebrow.innerHTML = m.eyebrow;
+        title.innerHTML = m.title.split(" ").map(function (w, i) {
+            return '<span class="w" style="--i:' + i + '">' + w + "</span>";
+        }).join(" ");
+        desc.innerHTML = m.description;
+        desc2.innerHTML = m.description2;
+        side.innerHTML = m.side;
+        photoImage.src = m.image;
+        bgi.src = m.image;
+    }
+
+    function lines(first) {
+        const t = first ? [1.5, 2.0, 3.6, 5.0, 6.0] : [0.7, 1.1, 2.7, 4.1, 5.1];
+        at(t[0], function () { cls("t-eyebrow"); });
+        at(t[1], function () { cls("t-title"); });
+        at(t[2], function () { cls("t-desc"); });
+        at(t[3], function () { cls("t-desc2"); });
+        at(t[4], function () { cls("t-side"); });
+    }
+
+    function clearLines() {
+        film.classList.add("swapping");
+        film.classList.remove("t-eyebrow", "t-title", "t-desc", "t-desc2", "t-side");
+    }
+
+
+    /* =========================================
+       THE PEAK
+       0.0  the drum-roll photograph, held
+       0.3  FLASH. black lifts. the photo blooms
+            into its place; light floods in
+    ========================================= */
+
+    const vw = window.innerWidth, vh = window.innerHeight;
+
+    // exactly where the drum roll left it: full height, a touch pushed in
+    const ah = vh * 1.05, aw = ah * 0.75;
+
+    arrive.style.left   = (vw - aw) / 2 + "px";
+    arrive.style.top    = (vh - ah) / 2 + "px";
+    arrive.style.width  = aw + "px";
+    arrive.style.height = ah + "px";
+
+    arriveImg.src = memories[0].image;
+    setMemory(memories[0]);
+
+    function bloom() {
+
+        const r = photo.getBoundingClientRect();
+        const pad = 10;
+        const e = "1.15s cubic-bezier(0.16, 1, 0.3, 1)";
+
+        arrive.style.transition =
+            "left " + e + ", top " + e + ", width " + e + ", height " + e;
+
+        arrive.style.left   = (r.left + pad) + "px";
+        arrive.style.top    = (r.top + pad) + "px";
+        arrive.style.width  = (r.width - pad * 2) + "px";
+        arrive.style.height = (r.height - pad * 2) + "px";
+
+        black.style.opacity = "0";
+        fire(flash, "go");
+        cls("lit");
+
+        try { if (M) { M.level(2); M.hit(); } } catch (e2) {}
+        chime(523.25, UP);
+
+        const c = photoCentre();
+        burst(c.x, c.y, 150, 520);
+        at(0.25, function () { burst(c.x, c.y, 70, 320); });
+
+        at(1.15, function () {
+            photo.classList.add("show");
+            at(0.45, function () { arrive.remove(); black.remove(); });
+        });
+    }
+
+    function nextMemory(i) {
+
+        clearLines();
+
+        // the print flies off, up and away
+        photo.classList.remove("show");
+        photo.classList.add("out");
+
+        at(0.55, function () {
+
+            setMemory(memories[i]);
+            film.classList.remove("swapping");
+
+            photo.classList.remove("out");
+            photo.classList.add("pre");
+            void photo.offsetWidth;
+            photo.classList.remove("pre");
+            photo.classList.add("show");
+
+            fire(flash, "soft");
+            const c = photoCentre();
+            burst(c.x, c.y, 110, 420);
+
+            // each one lifts the bells a step higher
+            chime(523.25 * (i === 1 ? 1.122 : 1.26), UP.slice(0, 5));
+
+            lines(false);
+        });
+    }
+
+    function finale() {
+
+        const c = photoCentre();
+
+        fire(flash, "soft");
+        burst(c.x, c.y, 220, 640);
+        confetti(W < 700 ? 60 : 130);
+        at(0.5, function () { confetti(W < 700 ? 40 : 90); });
+
+        try { if (M) { M.swell(3); at(2.6, function () { M.hit(); }); } } catch (e) {}
+        chime(523.25 * 1.5, [1, 1.25, 1.5, 2, 2.5, 3, 4, 5]);
+
+        at(1.6, function () { cls("t-continue"); });
+    }
+
+
+    /* =========================================
+       RUN
+    ========================================= */
+
+    let started = false;
+
+    function run() {
+        if (started) return;
+        started = true;
+
+        at(START[0], bloom);
+        lines(true);
+
+        at(START[1], function () { nextMemory(1); });
+        at(START[2], function () { nextMemory(2); });
+        at(START[2] + 6.8, finale);
+    }
+
+    // never start on a blank frame: wait for the photographs (max 2s)
+    Promise.race([
+        Promise.all(memories.map(function (m) {
+            return new Promise(function (res) {
+                const im = new Image();
+                im.onload = im.onerror = res;
+                im.src = m.image;
+            });
+        })),
+        new Promise(function (res) { setTimeout(res, 2000); })
+    ]).then(run);
+
+
+    /* =========================================
+       ON TO CHAPTER V (a bright white-out)
+    ========================================= */
+
+    next.addEventListener("click", function () {
+
+        next.disabled = true;
+        film.classList.add("leaving");
+
+        chime(523.25 * 2, [1, 1.25, 1.5, 2]);
+        burst(vw / 2, vh / 2, 160, 700);
+
+        flash.classList.remove("go", "soft");
+        void flash.offsetWidth;
+        flash.classList.add("leave");
+
+        setTimeout(function () {
+            window.location.href = "chapter5.html";
+        }, 1000);
+    });
+
+    window.addEventListener("pageshow", function (e) {
+        if (e.persisted) {
+            film.classList.remove("leaving");
+            flash.classList.remove("leave");
+            next.disabled = false;
+        }
+    });
+
+})();
 
 </script>
 
+<script src="../music.js"></script>
 
 </body>
-
 </html>

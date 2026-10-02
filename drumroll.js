@@ -21,6 +21,9 @@
    Optional:  BirthdayDrumroll.preload([...])  loads photos early so the
               roll starts instantly.
               speed: 0.25 in play() runs everything 4x faster (testing).
+              handoff: true  keeps the zoomed photograph on screen and
+              moves on while it is still there (no fade to black), so the
+              next page can pick it up and carry on.
    ===================================================================== */
 
 (function () {
@@ -410,15 +413,17 @@
                     z.style.transform = "scale(" + (S * 1.07) + ")";
                 }, 1000 * sp);
 
-                // and out to black
-                setTimeout(function () {
-                    z.style.opacity = "0";
-                }, 1700 * sp);
+                // and out to black (unless handing the photograph on)
+                if (!opts.handoff) {
+                    setTimeout(function () {
+                        z.style.opacity = "0";
+                    }, 1700 * sp);
+                }
 
                 setTimeout(function () {
                     if (audio) audio.close();
                     finish();
-                }, 2500 * sp);
+                }, (opts.handoff ? 2000 : 2500) * sp);
             }
         }
     }
