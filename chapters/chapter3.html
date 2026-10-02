@@ -816,6 +816,35 @@
 
 
     /* =========================================
+       THE DRUM ROLL (after the last memory)
+
+       ROLL_PHOTOS pass by, in order, faster and faster.
+       ROLL_TARGET is the one that lands and zooms.
+       Make it the first photo of the next chapter.
+    ========================================= */
+
+    const ROLL_PHOTOS = [
+        "../assets/photos/childhood-1.jpg",
+        "../assets/photos/childhood-2.jpg",
+        "../assets/photos/growing-up-1.jpg",
+        "../assets/photos/growing-up-2.jpg",
+        "../assets/photos/growing-up-3.jpg",
+        "../assets/photos/chapter3-1.jpg",
+        "../assets/photos/chapter3-2.jpg",
+        "../assets/photos/chapter3-3.jpg"
+    ];
+
+    const ROLL_TARGET = "../assets/photos/chapter4-1.jpg";
+
+    // load them quietly now, so the roll starts the instant she taps
+    setTimeout(function () {
+        if (window.BirthdayDrumroll) {
+            window.BirthdayDrumroll.preload(ROLL_PHOTOS.concat([ROLL_TARGET]));
+        }
+    }, 4000);
+
+
+    /* =========================================
        ELEMENTS
     ========================================= */
 
@@ -1068,6 +1097,22 @@
 
     nextChapter.addEventListener("click", function () {
 
+        nextChapter.disabled = true;
+
+        // the drum roll: her photographs rush by, one zooms, Chapter IV begins
+        if (window.BirthdayDrumroll) {
+
+            window.BirthdayDrumroll.play({
+                photos: ROLL_PHOTOS,
+                target: ROLL_TARGET,
+                speed:  speed,
+                onDone: function () { window.location.href = "chapter4.html"; }
+            });
+
+            return;
+        }
+
+        // fallback if drumroll.js is missing: the light burn
         if (FX.leak) fire(leak);
         film.classList.add("leaving");
 
@@ -1085,6 +1130,7 @@
 
 </script>
 
+<script src="../drumroll.js"></script>
 <script src="../music.js"></script>
 
 </body>
