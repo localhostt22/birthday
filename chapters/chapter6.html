@@ -1,587 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <title>Chapter VI — The Beginning</title>
 
+<script src="../euphoria.js"></script>
+<script src="../drumroll.js"></script>
+
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
 
-    html {
-        scroll-behavior: smooth;
-    }
+    /* =====================================================
+       CHAPTER VI — THE BEGINNING
+       A breath of calm after the peak...
+       then ONE LAST THING: the drum roll, and the biggest
+       moment of the whole film.
+    ===================================================== */
 
-    body {
-        background: #050505;
-        color: #f4f1eb;
-        font-family: Arial, Helvetica, sans-serif;
-        overflow-x: hidden;
-    }
+    .film { --cx: 50%; --cy: 44%; }
 
-    /* =========================
-       MAIN CHAPTER
-    ========================= */
-
-    .chapter {
-        min-height: 100vh;
+    .center {
         position: relative;
-
+        z-index: 7;
+        width: 100%;
+        height: 100%;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-
-        padding: 80px 7vw;
-
-        overflow: hidden;
         text-align: center;
-
-        background:
-            radial-gradient(
-                circle at center,
-                rgba(255,255,255,.045),
-                transparent 38%
-            ),
-            linear-gradient(
-                120deg,
-                #050505 0%,
-                #090909 55%,
-                #050505 100%
-            );
+        padding: 0 8%;
+        transition: opacity 0.6s ease;
     }
 
-    .chapter::before,
-    .final::before {
-        content: "";
+    .center.gone { opacity: 0; pointer-events: none; }
 
-        position: absolute;
-        inset: 0;
+    .center .eyebrow { margin-bottom: 22px; }
 
-        pointer-events: none;
+    .center h1 { max-width: 860px; font-size: clamp(38px, 5.4vw, 70px); }
 
-        opacity: .035;
+    .center .description { max-width: 600px; margin: 26px auto 0; text-align: center; }
+    .center .description.lead { font-size: 17px; font-family: Georgia, serif; font-style: italic; margin-top: 22px; color: #ffe6b8; }
+    .center .description.second { margin-top: 12px; color: rgba(255, 246, 234, 0.85); }
 
-        background-image:
-            radial-gradient(
-                rgba(255,255,255,.18) .5px,
-                transparent .5px
-            );
-
-        background-size: 5px 5px;
-    }
-
-    .content {
-        position: relative;
-        z-index: 2;
-
-        max-width: 760px;
-        width: 100%;
-    }
-
-    /* =========================
-       TEXT
-    ========================= */
-
-    .chapter-number {
-        font-size: 11px;
-        letter-spacing: 7px;
-
-        color: #a7b0b8;
-
-        text-transform: uppercase;
-
-        margin-bottom: 28px;
-    }
-
-    .eyebrow {
+    .last-thing {
+        margin-top: 38px;
+        padding: 17px 38px;
+        font-family: Arial, sans-serif;
         font-size: 11px;
         letter-spacing: 6px;
-
-        color: #aeb8c2;
-
         text-transform: uppercase;
-
-        margin-bottom: 28px;
-    }
-
-    h1 {
-        font-family: Georgia, "Times New Roman", serif;
-
-        font-size: clamp(58px, 8vw, 105px);
-
-        line-height: .92;
-
-        font-weight: 400;
-
-        letter-spacing: -4px;
-
-        margin-bottom: 45px;
-    }
-
-    .intro {
-        max-width: 650px;
-
-        margin: 0 auto 25px;
-
-        color: #a8a8a8;
-
-        font-size: 15px;
-
-        line-height: 2;
-    }
-
-    /* =========================
-       ONE LAST THING BUTTON
-    ========================= */
-
-    .reveal-button {
-        display: inline-flex;
-
-        margin-top: 45px;
-
-        padding: 14px 22px;
-
-        border: 1px solid rgba(255,255,255,.25);
-
-        background: transparent;
-
-        color: #e8e8e8;
-
-        text-decoration: none;
-
-        font-size: 10px;
-
-        letter-spacing: 4px;
-
-        text-transform: uppercase;
-
+        color: #fff6ea;
         cursor: pointer;
-
-        transition:
-            .3s ease;
-
-        font-family: Arial, Helvetica, sans-serif;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 246, 234, 0.75);
+        border-radius: 40px;
+        -webkit-backdrop-filter: blur(6px);
+                backdrop-filter: blur(6px);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(14px) scale(0.94);
+        transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    visibility 0s linear 0.9s, background 0.3s ease;
     }
 
-    .reveal-button:hover {
-        border-color: rgba(255,255,255,.65);
-
-        background: rgba(255,255,255,.06);
-
-        transform: translateY(-2px);
+    .last-thing.in {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition-delay: 0s;
+        animation: bfBeat 2.2s ease-in-out 1s infinite;
     }
 
-    /* =========================
-       FINAL SECTION
-       HIDDEN INITIALLY
-    ========================= */
+    .last-thing:hover,
+    .last-thing:focus-visible { background: rgba(255, 255, 255, 0.28); outline: none; }
+
+    .last-thing.gone { opacity: 0; pointer-events: none; transition: opacity 0.4s ease; animation: none; }
+
+
+    /* ---- THE BIRTHDAY ---- */
 
     .final {
-        min-height: 100vh;
-
-        position: relative;
-
+        position: absolute;
+        inset: 0;
+        z-index: 8;
         display: none;
-
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-
         text-align: center;
-
-        padding: 90px 7vw;
-
-        overflow: hidden;
-
-        background:
-            radial-gradient(
-                circle at center,
-                #151515 0%,
-                #070707 52%,
-                #030303 100%
-            );
+        padding: 0 8%;
     }
 
-    .final.show {
-        display: flex;
-
-        animation: finalReveal 1.2s ease forwards;
-    }
-
-    @keyframes finalReveal {
-        from {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
-    }
-
-    .final-content {
-        position: relative;
-
-        z-index: 2;
-
-        max-width: 850px;
-
-        width: 100%;
-    }
-
-    /* =========================
-       FINAL TEXT
-    ========================= */
+    .final.show { display: flex; }
 
     .final-small {
-        font-size: 10px;
-
+        font-family: Arial, sans-serif;
+        font-size: 11px;
         letter-spacing: 7px;
-
-        color: #9ea8b1;
-
-        text-transform: uppercase;
-
-        margin-bottom: 35px;
+        color: #ffe6b8;
+        margin-bottom: 22px;
     }
 
     .final h2 {
-        font-family: Georgia, "Times New Roman", serif;
-
-        font-weight: 400;
-
-        font-size: clamp(58px, 9vw, 130px);
-
-        line-height: .92;
-
-        letter-spacing: -4px;
-
-        margin-bottom: 40px;
+        font-size: clamp(46px, 9.5vw, 128px);
+        line-height: 1.02;
+        letter-spacing: -2px;
+        text-shadow: 0 0 50px rgba(255, 200, 120, 0.85), 0 0 120px rgba(255, 120, 160, 0.55), 0 6px 40px rgba(70, 0, 60, 0.5);
     }
 
     .final-message {
-        color: #aaa;
-
-        font-size: 16px;
-
-        line-height: 2;
-
+        margin-top: 30px;
         max-width: 620px;
-
-        margin: 0 auto;
+        font-family: Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.9;
+        color: rgba(255, 246, 234, 0.95);
+        text-shadow: 0 2px 16px rgba(60, 0, 60, 0.6);
     }
 
     .love {
-        margin-top: 55px;
+        margin-top: 26px;
+        font-size: clamp(26px, 3.4vw, 42px);
+        font-style: italic;
+        text-shadow: 0 0 30px rgba(255, 140, 170, 0.9);
+    }
 
-        font-family: Georgia, "Times New Roman", serif;
+    .love.in { animation: heartbeat 1.5s ease-in-out 0.6s infinite; }
 
-        font-size: clamp(30px, 4vw, 48px);
-
-        color: #f2eee8;
+    @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        14%      { transform: scale(1.1); }
+        28%      { transform: scale(1); }
+        42%      { transform: scale(1.07); }
+        56%      { transform: scale(1); }
     }
 
     .end {
-        margin-top: 55px;
-
-        font-size: 9px;
-
-        letter-spacing: 5px;
-
-        color: #777;
-
-        text-transform: uppercase;
+        margin-top: 34px;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+        letter-spacing: 6px;
+        color: #ffe6b8;
     }
 
     .restart {
         display: inline-block;
-
-        margin-top: 30px;
-
-        color: #aaa;
-
-        text-decoration: none;
-
-        font-size: 9px;
-
+        margin-top: 16px;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
         letter-spacing: 3px;
-
-        text-transform: uppercase;
-
-        border-bottom: 1px solid #555;
-
-        padding-bottom: 5px;
-
-        transition: .25s;
+        color: rgba(255, 246, 234, 0.8);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 246, 234, 0.4);
+        padding-bottom: 3px;
+        pointer-events: none;
+        transition: color 0.3s ease, border-color 0.3s ease, opacity 0.8s ease;
     }
 
-    .restart:hover {
-        color: white;
+    .restart.in { pointer-events: auto; }
+    .restart:hover { color: #fff; border-color: #fff; }
 
-        border-color: white;
+    @media (max-width: 800px) {
+        .center .description.lead { font-size: 15px; }
+        .final-message { font-size: 13.5px; }
     }
 
-    /* =========================
-       FADE ANIMATIONS
-    ========================= */
-
-    .fade {
-        opacity: 0;
-
-        transform: translateY(22px);
-
-        animation: reveal 1s ease forwards;
+    @media (max-height: 640px) {
+        .final-message { margin-top: 18px; font-size: 13px; line-height: 1.7; }
+        .end { margin-top: 20px; }
     }
 
-    .delay1 {
-        animation-delay: .2s;
-    }
-
-    .delay2 {
-        animation-delay: .45s;
-    }
-
-    .delay3 {
-        animation-delay: .7s;
-    }
-
-    .delay4 {
-        animation-delay: .95s;
-    }
-
-    @keyframes reveal {
-        to {
-            opacity: 1;
-
-            transform: translateY(0);
-        }
-    }
-
-    /* =========================
-       FINAL REVEAL ANIMATION
-    ========================= */
-
-    .final.show .final-small {
-        animation: reveal 1s ease .2s forwards;
-
-        opacity: 0;
-    }
-
-    .final.show h2 {
-        animation: reveal 1s ease .45s forwards;
-
-        opacity: 0;
-    }
-
-    .final.show .final-message {
-        animation: reveal 1s ease .7s forwards;
-
-        opacity: 0;
-    }
-
-    .final.show .love {
-        animation: reveal 1s ease .95s forwards;
-
-        opacity: 0;
-    }
-
-    .final.show .end {
-        animation: reveal 1s ease 1.2s forwards;
-
-        opacity: 0;
-    }
-
-    .final.show .restart {
-        animation: reveal 1s ease 1.4s forwards;
-
-        opacity: 0;
-    }
-
-    /* =========================
-       MOBILE
-    ========================= */
-
-    @media (max-width: 600px) {
-
-        .chapter,
-        .final {
-            padding: 60px 7vw;
-        }
-
-        h1 {
-            letter-spacing: -2px;
-        }
-
-        .intro,
-        .final-message {
-            font-size: 14px;
-        }
-
-        .final h2 {
-            letter-spacing: -2px;
-        }
-
-        .reveal-button {
-            margin-top: 30px;
-        }
-    }
 </style>
 </head>
 
 
 <body>
 
-<!-- =====================================================
-     CHAPTER VI
-===================================================== -->
+<main class="film calm" id="film">
 
-<section class="chapter">
+    <div class="sky"></div>
+    <div class="dim"></div>
+    <div class="rays"></div>
+    <div class="glow"></div>
+    <div class="shade"></div>
 
-    <div class="content">
+    <canvas id="fx" aria-hidden="true"></canvas>
 
-        <div class="chapter-number fade">
-            CHAPTER VI
-        </div>
+    <!-- THE BEGINNING -->
+    <section class="center" id="center">
 
-        <div class="eyebrow fade delay1">
-            THE BEGINNING
-        </div>
+        <div class="chapter-number">CHAPTER VI</div>
 
-        <h1 class="fade delay2">
-            Because some stories<br>
-            aren't meant to end.
-        </h1>
+        <div id="eyebrow" class="eyebrow pop">THE BEGINNING</div>
 
-        <p class="intro fade delay3">
-            They are meant to continue.
+        <h1 id="title"></h1>
+
+        <p id="d1" class="description lead pop">They are meant to continue.</p>
+
+        <p id="d2" class="description pop">
+            We've already made so many memories — the planned ones, the
+            completely random ones, the little moments that didn't seem
+            important at the time but somehow became the ones worth
+            remembering.
         </p>
 
-        <p class="intro fade delay3">
-            We've already made so many memories — the planned ones,
-            the completely random ones, the little moments that didn't
-            seem important at the time but somehow became the ones
-            worth remembering.
-        </p>
-
-        <p class="intro fade delay4">
+        <p id="d3" class="description second pop">
             And if I could choose one thing for all the chapters ahead,
             I'd choose to keep making them with you.
         </p>
 
-        <!--
-            THIS IS THE ONLY BUTTON.
-
-            The birthday section below is completely hidden
-            until this button is clicked.
-        -->
-
-        <button
-            class="reveal-button fade delay4"
-            id="lastThingButton"
-            onclick="revealFinal()"
-        >
-            ONE LAST THING ↓
+        <!-- THE ONLY BUTTON. The birthday is hidden until it is clicked. -->
+        <button id="lastThing" class="last-thing" type="button">
+            One last thing ↓
         </button>
 
-    </div>
+    </section>
 
-</section>
+    <!-- AND ONE LAST THING (hidden until the drum roll ends) -->
+    <section class="final" id="final">
 
+        <div id="fSmall" class="final-small pop">AND ONE LAST THING</div>
 
-<!-- =====================================================
-     FINAL / BIRTHDAY SECTION
+        <h2 id="fTitle"></h2>
 
-     HIDDEN UNTIL BUTTON IS CLICKED
-===================================================== -->
-
-<section class="final" id="final">
-
-    <div class="final-content">
-
-        <div class="final-small">
-            AND ONE LAST THING
-        </div>
-
-        <h2>
-            Happy Birthday,<br>
-            beautiful. ❤️
-        </h2>
-
-        <p class="final-message">
-            Thank you for becoming one of the most beautiful parts
-            of my story. I don't know what every chapter ahead will
-            look like, but I know I want to be there for them.
+        <p id="fMsg" class="final-message pop">
+            Thank you for becoming one of the most beautiful parts of my
+            story. I don't know what every chapter ahead will look like,
+            but I know I want to be there for them.
         </p>
 
-        <div class="love">
-            I love you. ❤️
-        </div>
+        <div id="fLove" class="love pop">I love you. ❤️</div>
 
-        <div class="end">
-            THE END... FOR NOW.
-        </div>
+        <div id="fEnd" class="end pop">THE END... FOR NOW.</div>
 
-        <a
-            class="restart"
-            href="../index.html"
-        >
-            ↺ Start the story again
-        </a>
+        <a id="fRestart" class="restart pop" href="../index.html">↺ Start the story again</a>
 
-    </div>
+    </section>
 
-</section>
+    <div class="flash leave" id="flash"></div>
+
+</main>
 
 
 <script>
 
-function revealFinal() {
+(function () {
 
-    const finalSection =
-        document.getElementById("final");
+    // open chapter6.html?fast while testing (4x speed)
+    const sp = window.location.search.indexOf("fast") !== -1 ? 0.25 : 1;
 
-    const button =
-        document.getElementById("lastThingButton");
+    const $ = id => document.getElementById(id);
+    const film = $("film");
+    const flash = $("flash");
+    const M = window.BirthdayMusic;
 
-    /*
-        Prevent the button from being clicked
-        multiple times.
-    */
+    function at(s, fn) { setTimeout(fn, s * 1000 * sp); }
+    function show(id) { $(id).classList.add("in"); }
 
-    button.disabled = true;
+    const vw = () => window.innerWidth;
+    const vh = () => window.innerHeight;
 
-    /*
-        Hide the button after clicking.
-    */
+    BFX.start($("fx"));
+    BFX.words($("title"), "Because some stories aren't meant to end.");
+    BFX.words($("fTitle"), "Happy Birthday, beautiful. ❤️");
 
-    button.style.opacity = "0";
-    button.style.pointerEvents = "none";
 
-    /*
-        Reveal the birthday section.
-    */
+    /* =========================================
+       THE DRUM ROLL
+       Every photograph in the film rushes by;
+       the last one lands and zooms.
+    ========================================= */
 
-    finalSection.classList.add("show");
+    const P = n => "../assets/photos/" + n + ".jpg";
 
-    /*
-        Scroll smoothly to the birthday section.
-    */
+    const ROLL_PHOTOS = [
+        P("childhood-1"), P("childhood-2"),
+        P("growing-up-1"), P("growing-up-2"), P("growing-up-3"),
+        P("chapter3-1"), P("chapter3-2"), P("chapter3-3"),
+        P("chapter4-1"), P("chapter4-2"), P("chapter4-3"),
+        P("chapter5-2"), P("chapter5-3")
+    ];
 
-    setTimeout(() => {
+    const ROLL_TARGET = P("chapter5-1");
 
-        finalSection.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+    setTimeout(function () {
+        if (window.BirthdayDrumroll) {
+            window.BirthdayDrumroll.preload(ROLL_PHOTOS.concat([ROLL_TARGET]));
+        }
+    }, 3000);
+
+
+    /* =========================================
+       A BREATH OF CALM
+    ========================================= */
+
+    function intro() {
+
+        flash.style.transition = "opacity 1.6s ease-out";
+        flash.classList.remove("leave");
+
+        try { if (M) M.level(1); } catch (e) {}
+
+        at(1.0, function () { show("eyebrow"); });
+        at(1.5, function () { $("title").classList.add("in"); });
+        at(4.2, function () { show("d1"); });
+        at(5.8, function () { show("d2"); });
+        at(8.8, function () { show("d3"); });
+        at(11.4, function () { show("lastThing"); });
+    }
+
+    requestAnimationFrame(intro);
+
+
+    /* =========================================
+       ONE LAST THING
+    ========================================= */
+
+    $("lastThing").addEventListener("click", function () {
+
+        this.disabled = true;
+        this.classList.remove("in");
+        this.classList.add("gone");
+
+        $("center").classList.add("gone");
+
+        if (!window.BirthdayDrumroll) { reveal(); return; }
+
+        window.BirthdayDrumroll.play({
+            photos:  ROLL_PHOTOS,
+            target:  ROLL_TARGET,
+            speed:   sp,
+            handoff: true,
+            onDone:  reveal
+        });
+    });
+
+
+    /* =========================================
+       THE PEAK OF THE PEAKS
+    ========================================= */
+
+    function reveal() {
+
+        // white-out hides the swap
+        flash.style.transition = "none";
+        flash.classList.remove("leave");
+        flash.style.opacity = "1";
+        void flash.offsetWidth;
+        flash.style.transition = "opacity 1.8s ease-out";
+        flash.style.opacity = "0";
+
+        if (window.BirthdayDrumroll) window.BirthdayDrumroll.end(0);
+
+        film.classList.remove("calm");
+        film.classList.add("lit");
+        $("final").classList.add("show");
+
+        try { if (M) { M.level(2); M.hit(); at(1.2, function () { M.swell(3); }); } } catch (e) {}
+
+        BFX.chime(523.25, [1, 1.25, 1.5, 2, 2.5, 3, 4, 5]);
+        BFX.pop();
+        BFX.firework(vw() * 0.5, vh() * 0.32);
+        BFX.confetti(vw() < 700 ? 60 : 140);
+
+        // fireworks, one after another
+        const spots = [[0.2, 0.3], [0.8, 0.28], [0.35, 0.18], [0.65, 0.2], [0.12, 0.55], [0.88, 0.5], [0.5, 0.14]];
+
+        spots.forEach(function (s, i) {
+            at(0.7 + i * 0.75, function () {
+                BFX.firework(vw() * s[0], vh() * s[1]);
+                BFX.pop();
+            });
         });
 
-    }, 100);
+        at(1.5, function () { BFX.hearts(vw() < 700 ? 18 : 34); });
+        at(3.0, function () { BFX.confetti(vw() < 700 ? 40 : 90); });
 
-}
+        // the words
+        at(1.2,  function () { show("fSmall"); });
+        at(1.8,  function () { $("fTitle").classList.add("in"); BFX.chime(659.25, [1, 1.25, 1.5, 2]); });
+        at(4.8,  function () { show("fMsg"); });
+        at(7.6,  function () {
+            show("fLove");
+            BFX.chime(783.99, [1, 1.25, 1.5, 2, 2.5]);
+            BFX.hearts(vw() < 700 ? 26 : 50);
+            BFX.firework(vw() * 0.5, vh() * 0.3);
+            BFX.pop();
+        });
+        at(10.2, function () { show("fEnd"); });
+        at(11.6, function () { show("fRestart"); });
+
+        // and it never quite stops celebrating
+        setTimeout(function () {
+            setInterval(function () {
+                BFX.firework(vw() * (0.15 + Math.random() * 0.7), vh() * (0.15 + Math.random() * 0.35));
+                BFX.pop();
+            }, 3200);
+
+            setInterval(function () { BFX.hearts(8); }, 5000);
+            setInterval(function () { BFX.confetti(25); }, 7000);
+        }, 13000 * sp);
+    }
+
+})();
 
 </script>
+
+<script src="../music.js"></script>
 
 </body>
 </html>

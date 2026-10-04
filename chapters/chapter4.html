@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E">
 <title>Chapter IV — The Little Moments</title>
 
 <style>
@@ -666,6 +667,16 @@
     ========================================= */
 
     let AC = null;
+    let tried = false;
+
+    function arm() {
+        const evs = ["pointerdown", "keydown", "touchstart"];
+        const f = function () {
+            evs.forEach(function (e) { window.removeEventListener(e, f, true); });
+            try { if (AC) AC.resume(); } catch (e) {}
+        };
+        evs.forEach(function (e) { window.addEventListener(e, f, true); });
+    }
 
     function chime(base, ratios) {
 
@@ -679,16 +690,19 @@
         try {
             if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
 
-            const asked = performance.now();
-
             const go = function () {
-                if (AC.state !== "running" || performance.now() - asked > 500) return;
                 const t = AC.currentTime + 0.03;
                 ratios.forEach(function (r, i) { bell(base * r, t + i * 0.075); });
             };
 
-            if (AC.state === "suspended") AC.resume().then(go).catch(function () {});
-            else go();
+            if (AC.state === "running") { go(); return; }
+            if (tried) return;
+            tried = true;
+
+            arm();   // if the browser says no, her first tap turns the bells on
+            AC.resume().then(function () {
+                if (AC.state === "running") go();
+            }).catch(function () {});
         } catch (e) {}
     }
 
