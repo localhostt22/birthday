@@ -168,6 +168,14 @@
         .final-message { font-size: 13.5px; }
     }
 
+    @media (max-height: 700px) {
+        .center .eyebrow { margin-bottom: 14px; }
+        .center h1 { font-size: clamp(30px, 4.6vw, 52px); }
+        .center .description { font-size: 13px; line-height: 1.7; margin-top: 12px; }
+        .center .description.lead { font-size: 15px; }
+        .last-thing { margin-top: 22px; padding: 14px 30px; }
+    }
+
     @media (max-height: 640px) {
         .final-message { margin-top: 18px; font-size: 13px; line-height: 1.7; }
         .end { margin-top: 20px; }
@@ -286,10 +294,34 @@
 
     const ROLL_TARGET = P("chapter5-1");
 
+    // Only photographs that actually load go on the reel. A missing or
+    // wrongly-capitalised file is skipped instead of showing a broken picture.
+    let rollOk   = ROLL_PHOTOS.slice();
+    let targetOk = ROLL_TARGET;
+
+    function canLoad(src) {
+        return new Promise(function (res) {
+            const im = new Image();
+            im.onload  = function () { res(true); };
+            im.onerror = function () { res(false); };
+            im.src = src;
+        });
+    }
+
     setTimeout(function () {
-        if (window.BirthdayDrumroll) {
-            window.BirthdayDrumroll.preload(ROLL_PHOTOS.concat([ROLL_TARGET]));
-        }
+
+        const all = ROLL_PHOTOS.concat([ROLL_TARGET]);
+
+        Promise.all(all.map(canLoad)).then(function (ok) {
+
+            rollOk   = ROLL_PHOTOS.filter(function (p, i) { return ok[i]; });
+            targetOk = ok[all.length - 1] ? ROLL_TARGET : (rollOk[rollOk.length - 1] || ROLL_TARGET);
+
+            if (window.BirthdayDrumroll) {
+                window.BirthdayDrumroll.preload(rollOk.concat([targetOk]));
+            }
+        });
+
     }, 3000);
 
 
@@ -327,11 +359,11 @@
 
         $("center").classList.add("gone");
 
-        if (!window.BirthdayDrumroll) { reveal(); return; }
+        if (!window.BirthdayDrumroll || rollOk.length === 0) { reveal(); return; }
 
         window.BirthdayDrumroll.play({
-            photos:  ROLL_PHOTOS,
-            target:  ROLL_TARGET,
+            photos:  rollOk,
+            target:  targetOk,
             speed:   sp,
             handoff: true,
             onDone:  reveal
@@ -345,7 +377,7 @@
 
     function reveal() {
 
-        // white-out hides the swap
+        // 1. white-out: it hides everything that happens next
         flash.style.transition = "none";
         flash.classList.remove("leave");
         flash.style.opacity = "1";
@@ -353,55 +385,77 @@
         flash.style.transition = "opacity 1.8s ease-out";
         flash.style.opacity = "0";
 
-        if (window.BirthdayDrumroll) window.BirthdayDrumroll.end(0);
+        // 2. under the white, take the drum roll's photograph away.
+        //    (drumroll.js has no end() function, so we remove it ourselves)
+        const roll = document.getElementById("bfDr");
+        if (roll) roll.remove();
 
+        // 3. the birthday scene appears
         film.classList.remove("calm");
         film.classList.add("lit");
         $("final").classList.add("show");
 
-        try { if (M) { M.level(2); M.hit(); at(1.2, function () { M.swell(3); }); } } catch (e) {}
+        // 4. the words. These come FIRST and are never blocked by any
+        //    sound or sparkle that might fail.
+        at(1.2,  function () { show("fSmall"); });
+        at(1.8,  function () { $("fTitle").classList.add("in"); });
+        at(4.8,  function () { show("fMsg"); });
+        at(7.6,  function () { show("fLove"); });
+        at(10.2, function () { show("fEnd"); });
+        at(11.6, function () { show("fRestart"); });
 
-        BFX.chime(523.25, [1, 1.25, 1.5, 2, 2.5, 3, 4, 5]);
-        BFX.pop();
-        BFX.firework(vw() * 0.5, vh() * 0.32);
-        BFX.confetti(vw() < 700 ? 60 : 140);
+        // 5. the celebration (each piece is allowed to fail on its own)
+        function safe(fn) { try { fn(); } catch (e) {} }
+
+        safe(function () { if (M) { M.level(2); M.hit(); at(1.2, function () { safe(function () { M.swell(3); }); }); } });
+
+        safe(function () {
+            BFX.chime(523.25, [1, 1.25, 1.5, 2, 2.5, 3, 4, 5]);
+            BFX.pop();
+            BFX.firework(vw() * 0.5, vh() * 0.32);
+            BFX.confetti(vw() < 700 ? 60 : 140);
+        });
 
         // fireworks, one after another
         const spots = [[0.2, 0.3], [0.8, 0.28], [0.35, 0.18], [0.65, 0.2], [0.12, 0.55], [0.88, 0.5], [0.5, 0.14]];
 
-        spots.forEach(function (s, i) {
+        spots.forEach(function (sp2, i) {
             at(0.7 + i * 0.75, function () {
-                BFX.firework(vw() * s[0], vh() * s[1]);
+                safe(function () {
+                    BFX.firework(vw() * sp2[0], vh() * sp2[1]);
+                    BFX.pop();
+                });
+            });
+        });
+
+        at(1.5, function () { safe(function () { BFX.hearts(vw() < 700 ? 18 : 34); }); });
+        at(3.0, function () { safe(function () { BFX.confetti(vw() < 700 ? 40 : 90); }); });
+
+        at(1.8, function () { safe(function () { BFX.chime(659.25, [1, 1.25, 1.5, 2]); }); });
+        at(7.6, function () {
+            safe(function () {
+                BFX.chime(783.99, [1, 1.25, 1.5, 2, 2.5]);
+                BFX.hearts(vw() < 700 ? 26 : 50);
+                BFX.firework(vw() * 0.5, vh() * 0.3);
                 BFX.pop();
             });
         });
 
-        at(1.5, function () { BFX.hearts(vw() < 700 ? 18 : 34); });
-        at(3.0, function () { BFX.confetti(vw() < 700 ? 40 : 90); });
-
-        // the words
-        at(1.2,  function () { show("fSmall"); });
-        at(1.8,  function () { $("fTitle").classList.add("in"); BFX.chime(659.25, [1, 1.25, 1.5, 2]); });
-        at(4.8,  function () { show("fMsg"); });
-        at(7.6,  function () {
-            show("fLove");
-            BFX.chime(783.99, [1, 1.25, 1.5, 2, 2.5]);
-            BFX.hearts(vw() < 700 ? 26 : 50);
-            BFX.firework(vw() * 0.5, vh() * 0.3);
-            BFX.pop();
-        });
-        at(10.2, function () { show("fEnd"); });
-        at(11.6, function () { show("fRestart"); });
-
-        // and it never quite stops celebrating
+        // and it never quite stops celebrating, but gently: slower, and
+        // silent, so she can read the last words in peace. It also pauses
+        // while the tab is hidden so nothing piles up.
         setTimeout(function () {
-            setInterval(function () {
-                BFX.firework(vw() * (0.15 + Math.random() * 0.7), vh() * (0.15 + Math.random() * 0.35));
-                BFX.pop();
-            }, 3200);
 
-            setInterval(function () { BFX.hearts(8); }, 5000);
-            setInterval(function () { BFX.confetti(25); }, 7000);
+            setInterval(function () {
+                if (document.hidden) return;
+                safe(function () {
+                    BFX.firework(vw() * (0.15 + Math.random() * 0.7), vh() * (0.15 + Math.random() * 0.35));
+                });
+            }, 4200);
+
+            setInterval(function () { if (!document.hidden) safe(function () { BFX.hearts(8); }); }, 5000);
+            setInterval(function () { if (!document.hidden) safe(function () { BFX.confetti(25); }); }, 7000);
+
         }, 13000 * sp);
     }
 

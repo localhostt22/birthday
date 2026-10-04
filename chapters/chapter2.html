@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E">
-<title>Chapter II — Somewhere Along the Way</title>
+    <title>Chapter II — Somewhere Along the Way</title>
 
     <style>
 
@@ -699,17 +699,18 @@
             </div>
 
             <h1 id="title">
-                She was finding herself.
+                Slowly, she started becoming herself.
             </h1>
 
             <p id="description" class="description">
-                Somewhere between childhood and the person
-                she would become, she started discovering
-                her own little world.
+                Nobody announces the moment it happens. One day
+                you are a child, and the next you are someone with
+                dreams, opinions, and a laugh that is entirely
+                your own.
             </p>
 
             <p id="description2" class="description second">
-                She didn't have everything figured out yet.
+                She didn't have it all figured out.
                 She didn't need to.
             </p>
 
@@ -765,9 +766,9 @@
             stamp: "",
             sepia: 0.28,
             eyebrow: "SOMEWHERE ALONG THE WAY",
-            title: "She was finding herself.",
-            description: "Somewhere between childhood and the person she would become, she started discovering her own little world.",
-            description2: "She didn't have everything figured out yet. She didn't need to.",
+            title: "Slowly, she started becoming herself.",
+            description: "Nobody announces the moment it happens. One day you are a child, and the next you are someone with dreams, opinions, and a laugh that is entirely your own.",
+            description2: "She didn't have it all figured out. She didn't need to.",
             side: "A LITTLE GIRL.<br>SLOWLY BECOMING<br>SOMEONE NEW."
         },
 
@@ -775,10 +776,10 @@
             image: "../assets/photos/growing-up-2.jpg",
             stamp: "",
             sepia: 0.12,
-            eyebrow: "SHE WAS CHANGING",
-            title: "And then, she became her own person.",
-            description: "The little girl from those old photographs was slowly becoming someone different.",
-            description2: "More confident. More graceful. More herself.",
+            eyebrow: "THE YEARS WENT BY",
+            title: "Every year, a little more of her showed.",
+            description: "The girl in those old photographs never really disappeared. She just grew into someone braver, someone softer, someone surer of who she was.",
+            description2: "I wasn't there for any of it. But I am grateful for every year that made her.",
             side: "THE YEARS<br>LEFT THEIR MARK.<br>IN THE BEST WAY."
         },
 
@@ -787,9 +788,9 @@
             stamp: "",
             sepia: 0,
             eyebrow: "LIFE KEPT MOVING",
-            title: "She learned how to enjoy the moment.",
-            description: "There were new places, new memories, new versions of her.",
-            description2: "And somehow, every version was more beautiful than the last.",
+            title: "She learned to love the moment.",
+            description: "New places. New faces. New versions of her, each one a little more fearless than the last.",
+            description2: "She had no idea that someone, somewhere down the road, was about to love every one of them.",
             side: "NEW PLACES.<br>NEW MEMORIES.<br>A LIFE OF HER OWN."
         }
 
@@ -982,12 +983,12 @@
     ========================================= */
 
     // when each memory begins, and how long it stays
-    const START    = [1.4, 11.6, 21.0];
-    const DURATION = [10.0, 9.2, 9.2];
+    const START    = [1.4, 13.4, 24.4];
+    const DURATION = [11.8, 10.8, 10.8];
 
     // when its lines arrive, counted from its start
-    const FIRST = { eyebrow: 1.8, title: 2.8, desc: 4.8, desc2: 6.4, side: 7.6 };
-    const LATER = { eyebrow: 0.9, title: 1.9, desc: 3.9, desc2: 5.5, side: 6.6 };
+    const FIRST = { eyebrow: 1.8, title: 2.8, desc: 4.6, desc2: 7.0, side: 8.4 };
+    const LATER = { eyebrow: 0.9, title: 1.9, desc: 3.6, desc2: 6.0, side: 7.4 };
 
     function show(cls, seconds) {
         at(seconds, function () { film.classList.add(cls); });
