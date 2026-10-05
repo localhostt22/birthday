@@ -4,78 +4,505 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E"
+    >
+
     <title>Chapter I — Before I Knew You</title>
 
-    <!-- The sketchbook look (note: lowercase file name, it matters on web hosts) -->
-    <script src="../sketch.js"></script>
+
+    <!-- IMPORTANT:
+         Your actual file is Sketch.js with capital S.
+    -->
+
+    <script src="../Sketch.js"></script>
+
 
     <style>
 
-        /* Everything shared (film, bars, lamp, dust, sheet, pencil, text styles)
-           comes from sketch.js. Only this chapter's layout lives here. */
+        /* =====================================================
+           CHAPTER I — INTERACTION
+           ===================================================== */
 
         .stage {
+
             position: absolute;
+
             inset: var(--bar) 0;
+
             z-index: 8;
+
             display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(0, 1fr);
+
             align-items: center;
+
             gap: 4vw;
-            padding: 0 7vw;
+
+            padding:
+                0 7vw;
+
             pointer-events: none;
+
         }
+
 
         .copy {
+
             display: grid;
+
             max-width: 520px;
+
         }
+
 
         .copy > div {
+
             grid-area: 1 / 1;
+
             align-self: center;
+
         }
 
-        /* the box the photograph sheet must fit inside */
+
         .zone {
+
             align-self: stretch;
-            margin: 3vh 0;
+
+            margin:
+                3vh 0;
+
+            position: relative;
+
         }
+
 
         .memory {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: clamp(13px, 1.5vw, 20px);
-            letter-spacing: 6px;
-            line-height: 2.2;
-            text-transform: uppercase;
-            color: #fff3dc;
-            text-shadow: 0 0 30px rgba(255, 170, 90, .35), 0 3px 18px rgba(0, 0, 0, .6);
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            font-size:
+                clamp(
+                    13px,
+                    1.5vw,
+                    20px
+                );
+
+            letter-spacing:
+                6px;
+
+            line-height:
+                2.2;
+
+            text-transform:
+                uppercase;
+
+            color:
+                #fff3dc;
+
+            text-shadow:
+                0 0 30px
+                rgba(255,170,90,.35),
+
+                0 3px 18px
+                rgba(0,0,0,.6);
+
         }
 
-        .memory .gold { color: #ffc65a; display: block; }
 
-        a.next-chapter { text-decoration: none; }
+        .memory .gold {
 
-        /* two blurred colour washes, one per photograph */
-        .bgi { opacity: 0; }
-        .film.painting .bgi.on { opacity: .55; }
-        .film.painting .bgi:not(.on) { opacity: 0; }
+            color:
+                #ffc65a;
+
+            display:
+                block;
+
+        }
+
+
+        a.next-chapter {
+
+            text-decoration:
+                none;
+
+        }
+
+
+        .bgi {
+
+            opacity:
+                0;
+
+        }
+
+
+        .film.painting .bgi.on {
+
+            opacity:
+                .55;
+
+        }
+
+
+        .film.painting .bgi:not(.on) {
+
+            opacity:
+                0;
+
+        }
+
+
+        /* =====================================================
+           TRACE OVERLAY
+           ===================================================== */
+
+        .memory-mask {
+
+            position:
+                absolute;
+
+            z-index:
+                100;
+
+            pointer-events:
+                auto;
+
+            cursor:
+                crosshair;
+
+            opacity:
+                0;
+
+            transition:
+                opacity 1s ease;
+
+        }
+
+
+        .memory-mask.active {
+
+            opacity:
+                1;
+
+        }
+
+
+        .memory-mask.finished {
+
+            opacity:
+                0;
+
+            pointer-events:
+                none;
+
+        }
+
+
+        /* =====================================================
+           TRACE PROMPT
+           ===================================================== */
+
+        .memory-prompt {
+
+            position:
+                fixed;
+
+            left:
+                50%;
+
+            bottom:
+                calc(
+                    var(--bar) + 25px
+                );
+
+            transform:
+                translate(
+                    -50%,
+                    10px
+                );
+
+            z-index:
+                150;
+
+            width:
+                max-content;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                4px;
+
+            text-transform:
+                uppercase;
+
+            text-align:
+                center;
+
+            color:
+                rgba(
+                    246,
+                    234,
+                    212,
+                    .85
+                );
+
+            opacity:
+                0;
+
+            pointer-events:
+                none;
+
+            transition:
+                opacity 1.2s ease,
+                transform 1.2s ease;
+
+        }
+
+
+        .memory-prompt.in {
+
+            opacity:
+                1;
+
+            transform:
+                translate(
+                    -50%,
+                    0
+                );
+
+        }
+
+
+        .memory-prompt.out {
+
+            opacity:
+                0;
+
+            transform:
+                translate(
+                    -50%,
+                    -8px
+                );
+
+        }
+
+
+        .memory-prompt small {
+
+            display:
+                block;
+
+            margin-top:
+                8px;
+
+            font-size:
+                8px;
+
+            letter-spacing:
+                2px;
+
+            color:
+                rgba(
+                    246,
+                    234,
+                    212,
+                    .45
+                );
+
+        }
+
+
+        /* =====================================================
+           TRACE PROGRESS
+           ===================================================== */
+
+        .memory-progress {
+
+            position:
+                fixed;
+
+            left:
+                50%;
+
+            bottom:
+                calc(
+                    var(--bar) + 12px
+                );
+
+            transform:
+                translateX(-50%);
+
+            width:
+                100px;
+
+            height:
+                1px;
+
+            z-index:
+                151;
+
+            background:
+                rgba(
+                    246,
+                    234,
+                    212,
+                    .12
+                );
+
+            opacity:
+                0;
+
+            pointer-events:
+                none;
+
+            transition:
+                opacity 1s ease;
+
+        }
+
+
+        .memory-progress.in {
+
+            opacity:
+                1;
+
+        }
+
+
+        .memory-progress-bar {
+
+            width:
+                0%;
+
+            height:
+                100%;
+
+            background:
+                rgba(
+                    255,
+                    198,
+                    90,
+                    .7
+                );
+
+            transition:
+                width .15s ease;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
 
         @media (max-width: 760px) {
+
             .stage {
-                grid-template-columns: 1fr;
-                grid-template-rows: minmax(0, 1fr) auto;
-                gap: 2vh;
-                padding: 1vh 7vw;
+
+                grid-template-columns:
+                    1fr;
+
+                grid-template-rows:
+                    minmax(0, 1fr)
+                    auto;
+
+                gap:
+                    2vh;
+
+                padding:
+                    1vh 7vw;
+
             }
-            .zone { order: -1; margin: 1vh 0; }
-            .copy { max-width: none; min-height: 30vh; }
-            .title { font-size: clamp(32px, 9vw, 48px); }
-            .desc { font-size: 13px; line-height: 1.7; margin-top: 16px; }
-            .memory { letter-spacing: 3px; }
+
+
+            .zone {
+
+                order:
+                    -1;
+
+                margin:
+                    1vh 0;
+
+            }
+
+
+            .copy {
+
+                max-width:
+                    none;
+
+                min-height:
+                    30vh;
+
+            }
+
+
+            .title {
+
+                font-size:
+                    clamp(
+                        32px,
+                        9vw,
+                        48px
+                    );
+
+            }
+
+
+            .desc {
+
+                font-size:
+                    13px;
+
+                line-height:
+                    1.7;
+
+                margin-top:
+                    16px;
+
+            }
+
+
+            .memory {
+
+                letter-spacing:
+                    3px;
+
+            }
+
+
+            .memory-prompt {
+
+                width:
+                    100%;
+
+                bottom:
+                    calc(
+                        var(--bar) + 25px
+                    );
+
+            }
+
         }
 
     </style>
@@ -85,71 +512,247 @@
 
 <body>
 
-<div class="film" id="film">
 
-    <!-- The colour of each photograph seeps into the room -->
-    <div class="backdrop" aria-hidden="true">
-        <img class="bgi" id="bg1" src="../assets/photos/childhood-1.jpg" alt="">
-        <img class="bgi" id="bg2" src="../assets/photos/childhood-2.jpg" alt="">
+<div
+    class="film"
+    id="film"
+>
+
+
+    <!-- =====================================================
+         BACKGROUND PHOTOGRAPHS
+         ===================================================== -->
+
+    <div
+        class="backdrop"
+        aria-hidden="true"
+    >
+
+        <img
+            class="bgi"
+            id="bg1"
+            src="../assets/photos/childhood-1.jpg"
+            alt=""
+        >
+
+        <img
+            class="bgi"
+            id="bg2"
+            src="../assets/photos/childhood-2.jpg"
+            alt=""
+        >
+
     </div>
 
-    <div class="lamp"></div>
-    <canvas class="dust" id="dust" aria-hidden="true"></canvas>
 
-    <!-- The sketched photographs are drawn into this layer -->
-    <div class="layer" id="layer"></div>
+    <div class="lamp"></div>
+
+
+    <canvas
+        class="dust"
+        id="dust"
+        aria-hidden="true"
+    ></canvas>
+
+
+    <!-- =====================================================
+         SKETCHBOOK
+         ===================================================== -->
+
+    <div
+        class="layer"
+        id="layer"
+    ></div>
+
 
     <div class="vignette"></div>
+
+
     <div class="bar top"></div>
+
     <div class="bar bottom"></div>
+
+
+    <!-- =====================================================
+         STORY
+         ===================================================== -->
 
     <div class="stage">
 
+
         <div class="copy">
 
+
+            <!-- FIRST TEXT -->
+
             <div id="t1">
-                <div class="eyebrow pop" id="eyebrow">A LONG TIME AGO</div>
 
-                <h1 class="title" id="title"></h1>
 
-                <svg class="uline" id="uline" viewBox="0 0 380 16" aria-hidden="true">
-                    <path pathLength="1" d="M4 10 C 90 2, 180 14, 260 6 S 350 8, 376 5"/>
+                <div
+                    class="eyebrow pop"
+                    id="eyebrow"
+                >
+                    A LONG TIME AGO
+                </div>
+
+
+                <h1
+                    class="title"
+                    id="title"
+                ></h1>
+
+
+                <svg
+                    class="uline"
+                    id="uline"
+                    viewBox="0 0 380 16"
+                    aria-hidden="true"
+                >
+
+                    <path
+                        pathLength="1"
+                        d="
+                            M4 10
+                            C 90 2,
+                            180 14,
+                            260 6
+                            S 350 8,
+                            376 5
+                        "
+                    />
+
                 </svg>
 
-                <p class="desc pop" id="desc">
+
+                <p
+                    class="desc pop"
+                    id="desc"
+                >
+
                     Long before I knew her name,
                     before I knew her smile,
                     before I knew that one day
                     she would mean so much to me...
+
                 </p>
+
+
             </div>
 
+
+            <!-- SECOND TEXT -->
+
             <div id="t2">
+
+
                 <div class="memory">
-                    <span class="pop" id="m1">Somewhere along the way...</span>
-                    <span class="pop gold" id="m2">She started growing up.</span>
+
+
+                    <span
+                        class="pop"
+                        id="m1"
+                    >
+                        Somewhere along the way...
+                    </span>
+
+
+                    <span
+                        class="pop gold"
+                        id="m2"
+                    >
+                        She started growing up.
+                    </span>
+
+
                 </div>
+
+
             </div>
+
 
         </div>
 
-        <div class="zone" id="zone"></div>
+
+        <!-- PHOTO / SKETCH ZONE -->
+
+        <div
+            class="zone"
+            id="zone"
+        ></div>
+
 
     </div>
+
+
+    <!-- =====================================================
+         TRACE PROMPT
+         ===================================================== -->
+
+    <div
+        class="memory-prompt"
+        id="memoryPrompt"
+    >
+
+        TRACE THE MEMORY
+
+        <small>
+            trace across the sketch
+        </small>
+
+    </div>
+
+
+    <div
+        class="memory-progress"
+        id="memoryProgress"
+    >
+
+        <div
+            class="memory-progress-bar"
+            id="memoryProgressBar"
+        ></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTINUE
+         ===================================================== -->
 
     <div class="content">
 
-        <div class="chapter-number">CHAPTER I</div>
+
+        <div class="chapter-number">
+            CHAPTER I
+        </div>
+
 
         <div class="continue-wrap">
-            <a class="next-chapter" id="continueLink" href="chapter2.html">
-                Continue the story <span>→</span>
+
+
+            <a
+                class="next-chapter"
+                id="continueLink"
+                href="chapter2.html"
+            >
+
+                Continue the story
+
+                <span>
+                    →
+                </span>
+
             </a>
+
+
         </div>
+
 
     </div>
 
+
     <div class="grain"></div>
+
 
 </div>
 
@@ -158,149 +761,1556 @@
 
 (function () {
 
-    var film  = document.getElementById("film");
-    var link  = document.getElementById("continueLink");
-    var $     = function (id) { return document.getElementById(id); };
-    var show  = function (id) { $(id).classList.add("in"); };
-    var hide  = function (id) { $(id).classList.remove("in"); };
 
-    /* ---- safety net: if sketch.js ever fails to load, the chapter
-            still plays as a simple, readable page ---- */
+    /* =====================================================
+       HELPERS
+       ===================================================== */
 
-    var BF = window.BFSketch;
+    const film =
+        document.getElementById(
+            "film"
+        );
 
-    if (!BF) {
-        $("title").textContent = "She was just a little girl.";
-        film.classList.add("open", "running", "show-chapter", "show-continue");
-        ["eyebrow", "desc", "title", "uline"].forEach(show);
-        $("title").classList.add("in");
-        return;
+
+    const zone =
+        document.getElementById(
+            "zone"
+        );
+
+
+    const layer =
+        document.getElementById(
+            "layer"
+        );
+
+
+    const link =
+        document.getElementById(
+            "continueLink"
+        );
+
+
+    function $(id) {
+
+        return document.getElementById(
+            id
+        );
+
     }
 
-    var SP = BF.speed;                        // 0.25 with ?fast on the address
-    function at(s, fn) { setTimeout(fn, s * 1000 * SP); }
 
-    BF.words($("title"), "She was just a little girl.");
+    function show(id) {
 
-    var layer = $("layer");
-    var zone  = $("zone");
+        const el =
+            $(id);
 
-    if (!BF.reduce) BF.dust($("dust"));
+        if (el) {
 
-    /* the two photographs, each with its own little doodles */
+            el.classList.add(
+                "in"
+            );
 
-    var sheet1 = BF.sheet(layer, zone, "../assets/photos/childhood-1.jpg", {
-        rot: -2.2, exit: -1, alt: "Saniya as a child",
-        doodles: [
-            { shape: "heart", x: 101, y: 5,  s: 46, c: "coral", r: 12,  d: 0.1 },
-            { shape: "star",  x: -2,  y: 94, s: 38, c: "gold",  r: -10, d: 0.5 },
-            { shape: "spark", x: 103, y: 90, s: 32, c: "cream", r: 0,   d: 0.9 }
-        ]
-    });
+        }
 
-    var sheet2 = BF.sheet(layer, zone, "../assets/photos/childhood-2.jpg", {
-        rot: 1.8, exit: 1, alt: "Saniya growing up",
-        doodles: [
-            { shape: "spark", x: -3,  y: 6,  s: 40, c: "gold",  r: 0,  d: 0.1 },
-            { shape: "heart", x: 102, y: 95, s: 44, c: "pink",  r: -8, d: 0.5 },
-            { shape: "loop",  x: 100, y: 3,  s: 46, c: "cream", r: 10, d: 0.9 }
-        ]
-    });
+    }
 
 
-    /* =========================================
-       THE SCENE (seconds)
-    ========================================= */
+    function hide(id) {
+
+        const el =
+            $(id);
+
+        if (el) {
+
+            el.classList.remove(
+                "in"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SKETCH.JS
+       ===================================================== */
+
+    const BF =
+        window.BFSketch;
+
+
+    if (!BF) {
+
+        console.error(
+            "Sketch.js did not load. Make sure the filename is Sketch.js."
+        );
+
+        return;
+
+    }
+
+
+    const SP =
+        BF.speed;
+
+
+    function at(seconds, fn) {
+
+        setTimeout(
+            fn,
+            seconds *
+            1000 *
+            SP
+        );
+
+    }
+
+
+    /* =====================================================
+       DUST
+       ===================================================== */
+
+    if (!BF.reduce) {
+
+        BF.dust(
+            $("dust")
+        );
+
+    }
+
+
+    /* =====================================================
+       PHOTOGRAPH 1
+       ===================================================== */
+
+    const sheet1 =
+        BF.sheet(
+
+            layer,
+
+            zone,
+
+            "../assets/photos/childhood-1.jpg",
+
+            {
+
+                rot:
+                    -2.2,
+
+                exit:
+                    -1,
+
+                alt:
+                    "Saniya as a child",
+
+
+                doodles: [
+
+                    {
+
+                        shape:
+                            "heart",
+
+                        x:
+                            101,
+
+                        y:
+                            5,
+
+                        s:
+                            46,
+
+                        c:
+                            "coral",
+
+                        r:
+                            12,
+
+                        d:
+                            .1
+
+                    },
+
+
+                    {
+
+                        shape:
+                            "star",
+
+                        x:
+                            -2,
+
+                        y:
+                            94,
+
+                        s:
+                            38,
+
+                        c:
+                            "gold",
+
+                        r:
+                            -10,
+
+                        d:
+                            .5
+
+                    },
+
+
+                    {
+
+                        shape:
+                            "spark",
+
+                        x:
+                            103,
+
+                        y:
+                            90,
+
+                        s:
+                            32,
+
+                        c:
+                            "cream",
+
+                        r:
+                            0,
+
+                        d:
+                            .9
+
+                    }
+
+                ]
+
+            }
+
+        );
+
+
+    /* =====================================================
+       PHOTOGRAPH 2
+       ===================================================== */
+
+    const sheet2 =
+        BF.sheet(
+
+            layer,
+
+            zone,
+
+            "../assets/photos/childhood-2.jpg",
+
+            {
+
+                rot:
+                    1.8,
+
+                exit:
+                    1,
+
+                alt:
+                    "Saniya growing up",
+
+
+                doodles: [
+
+                    {
+
+                        shape:
+                            "spark",
+
+                        x:
+                            -3,
+
+                        y:
+                            6,
+
+                        s:
+                            40,
+
+                        c:
+                            "gold",
+
+                        r:
+                            0,
+
+                        d:
+                            .1
+
+                    },
+
+
+                    {
+
+                        shape:
+                            "heart",
+
+                        x:
+                            102,
+
+                        y:
+                            95,
+
+                        s:
+                            44,
+
+                        c:
+                            "pink",
+
+                        r:
+                            -8,
+
+                        d:
+                            .5
+
+                    },
+
+
+                    {
+
+                        shape:
+                            "loop",
+
+                        x:
+                            100,
+
+                        y:
+                            3,
+
+                        s:
+                            46,
+
+                        c:
+                            "cream",
+
+                        r:
+                            10,
+
+                        d:
+                            .9
+
+                    }
+
+                ]
+
+            }
+
+        );
+
+
+    /* =====================================================
+       TRACE VARIABLES
+       ===================================================== */
+
+    let memoryMask =
+        null;
+
+
+    let maskContext =
+        null;
+
+
+    let tracing =
+        false;
+
+
+    let revealFinished =
+        false;
+
+
+    let revealedAmount =
+        0;
+
+
+    const requiredReveal =
+        95;
+
+
+    let lastX =
+        null;
+
+
+    let lastY =
+        null;
+
+
+    /* =====================================================
+       CREATE TRACE MASK
+       ===================================================== */
+
+    function createMemoryMask() {
+
+
+        if (memoryMask)
+            return;
+
+
+        if (!sheet1.el)
+            return;
+
+
+        const rect =
+            sheet1.el.getBoundingClientRect();
+
+
+        /*
+         * The mask sits directly over
+         * the finished sketch/photo frame.
+         */
+
+        memoryMask =
+            document.createElement(
+                "canvas"
+            );
+
+
+        memoryMask.className =
+            "memory-mask";
+
+
+        memoryMask.style.left =
+            "0px";
+
+
+        memoryMask.style.top =
+            "0px";
+
+
+        memoryMask.style.width =
+            rect.width +
+            "px";
+
+
+        memoryMask.style.height =
+            rect.height +
+            "px";
+
+
+        memoryMask.width =
+            Math.max(
+                1,
+                Math.round(
+                    rect.width *
+                    Math.min(
+                        window.devicePixelRatio ||
+                        1,
+                        2
+                    )
+                )
+            );
+
+
+        memoryMask.height =
+            Math.max(
+                1,
+                Math.round(
+                    rect.height *
+                    Math.min(
+                        window.devicePixelRatio ||
+                        1,
+                        2
+                    )
+                )
+            );
+
+
+        /*
+         * Put the trace canvas inside
+         * the actual sketch/photo element.
+         */
+
+        sheet1.el.appendChild(
+            memoryMask
+        );
+
+
+        maskContext =
+            memoryMask.getContext(
+                "2d"
+            );
+
+
+        const dpr =
+            Math.min(
+                window.devicePixelRatio ||
+                1,
+                2
+            );
+
+
+        maskContext.setTransform(
+            dpr,
+            0,
+            0,
+            dpr,
+            0,
+            0
+        );
+
+
+        /*
+         * IMPORTANT:
+         *
+         * This paper hides the REAL photograph.
+         *
+         * The photograph will already be
+         * underneath it.
+         */
+
+        maskContext.fillStyle =
+            "#f6eee0";
+
+
+        maskContext.fillRect(
+            0,
+            0,
+            rect.width,
+            rect.height
+        );
+
+
+        /*
+         * Paper texture.
+         */
+
+        maskContext.fillStyle =
+            "rgba(150,120,80,.035)";
+
+
+        for (
+            let i = 0;
+            i < 600;
+            i++
+        ) {
+
+            const x =
+                Math.random() *
+                rect.width;
+
+
+            const y =
+                Math.random() *
+                rect.height;
+
+
+            const r =
+                Math.random() *
+                1.3;
+
+
+            maskContext.beginPath();
+
+
+            maskContext.arc(
+                x,
+                y,
+                r,
+                0,
+                Math.PI * 2
+            );
+
+
+            maskContext.fill();
+
+        }
+
+
+        memoryMask.classList.add(
+            "active"
+        );
+
+    }
+
+
+    /* =====================================================
+       POSITION
+       ===================================================== */
+
+    function pointerPosition(
+        event
+    ) {
+
+
+        const rect =
+            memoryMask.getBoundingClientRect();
+
+
+        return {
+
+            x:
+                event.clientX -
+                rect.left,
+
+            y:
+                event.clientY -
+                rect.top
+
+        };
+
+    }
+
+
+    /* =====================================================
+       ERASE / TRACE
+       ===================================================== */
+
+    function eraseMemory(
+        x,
+        y
+    ) {
+
+
+        if (
+            !memoryMask ||
+            !maskContext ||
+            revealFinished
+        ) {
+
+            return;
+
+        }
+
+
+        maskContext.save();
+
+
+        maskContext.globalCompositeOperation =
+            "destination-out";
+
+
+        const radius =
+            38;
+
+
+        /*
+         * Soft tracing brush.
+         */
+
+        const gradient =
+            maskContext.createRadialGradient(
+
+                x,
+                y,
+                0,
+
+                x,
+                y,
+                radius
+
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(0,0,0,1)"
+        );
+
+
+        gradient.addColorStop(
+            .55,
+            "rgba(0,0,0,.9)"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "rgba(0,0,0,0)"
+        );
+
+
+        maskContext.fillStyle =
+            gradient;
+
+
+        maskContext.beginPath();
+
+
+        maskContext.arc(
+            x,
+            y,
+            radius,
+            0,
+            Math.PI * 2
+        );
+
+
+        maskContext.fill();
+
+
+        /*
+         * Connect the trace.
+         */
+
+        if (
+            lastX !== null &&
+            lastY !== null
+        ) {
+
+            maskContext.lineWidth =
+                48;
+
+
+            maskContext.lineCap =
+                "round";
+
+
+            maskContext.lineJoin =
+                "round";
+
+
+            maskContext.beginPath();
+
+
+            maskContext.moveTo(
+                lastX,
+                lastY
+            );
+
+
+            maskContext.lineTo(
+                x,
+                y
+            );
+
+
+            maskContext.stroke();
+
+        }
+
+
+        maskContext.restore();
+
+
+        lastX =
+            x;
+
+
+        lastY =
+            y;
+
+
+        revealedAmount++;
+
+
+        const progress =
+            Math.min(
+                revealedAmount /
+                requiredReveal,
+                1
+            );
+
+
+        $("memoryProgressBar")
+            .style
+            .width =
+                (
+                    progress *
+                    100
+                ) +
+                "%";
+
+
+        /*
+         * Enough traced.
+         */
+
+        if (
+            progress >= 1
+        ) {
+
+            finishMemoryReveal();
+
+        }
+
+    }
+
+
+    /* =====================================================
+       FINISH TRACE
+       ===================================================== */
+
+    function finishMemoryReveal() {
+
+
+        if (
+            revealFinished
+        ) {
+
+            return;
+
+        }
+
+
+        revealFinished =
+            true;
+
+
+        tracing =
+            false;
+
+
+        /*
+         * Hide the prompt.
+         */
+
+        $("memoryPrompt")
+            .classList
+            .add(
+                "out"
+            );
+
+
+        $("memoryProgress")
+            .classList
+            .remove(
+                "in"
+            );
+
+
+        /*
+         * Fade away the tracing paper.
+         *
+         * The REAL photograph is now
+         * already visible underneath.
+         */
+
+        if (memoryMask) {
+
+            memoryMask.classList.add(
+                "finished"
+            );
+
+        }
+
+
+        /*
+         * Give the photograph
+         * a moment to breathe.
+         */
+
+        setTimeout(
+            function () {
+
+                continueOriginalStory();
+
+            },
+            1500
+        );
+
+    }
+
+
+    /* =====================================================
+       ACTIVATE TRACE
+       ===================================================== */
+
+    function activateMemoryReveal() {
+
+
+        if (
+            revealFinished
+        ) {
+
+            return;
+
+        }
+
+
+        createMemoryMask();
+
+
+        /*
+         * IMPORTANT:
+         *
+         * The real photograph is NOT
+         * shown separately here.
+         *
+         * It is already underneath
+         * the tracing paper.
+         */
+
+        $("memoryPrompt")
+            .classList
+            .add(
+                "in"
+            );
+
+
+        $("memoryProgress")
+            .classList
+            .add(
+                "in"
+            );
+
+    }
+
+
+    /* =====================================================
+       POINTER DOWN
+       ===================================================== */
+
+    document.addEventListener(
+        "pointerdown",
+        function (event) {
+
+
+            if (
+                !memoryMask ||
+                !memoryMask.classList.contains(
+                    "active"
+                ) ||
+                revealFinished
+            ) {
+
+                return;
+
+            }
+
+
+            const rect =
+                memoryMask.getBoundingClientRect();
+
+
+            if (
+                event.clientX <
+                    rect.left ||
+
+                event.clientX >
+                    rect.right ||
+
+                event.clientY <
+                    rect.top ||
+
+                event.clientY >
+                    rect.bottom
+            ) {
+
+                return;
+
+            }
+
+
+            tracing =
+                true;
+
+
+            const point =
+                pointerPosition(
+                    event
+                );
+
+
+            eraseMemory(
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       POINTER MOVE
+       ===================================================== */
+
+    document.addEventListener(
+        "pointermove",
+        function (event) {
+
+
+            if (
+                !tracing ||
+                !memoryMask ||
+                revealFinished
+            ) {
+
+                return;
+
+            }
+
+
+            const point =
+                pointerPosition(
+                    event
+                );
+
+
+            eraseMemory(
+                point.x,
+                point.y
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       POINTER UP
+       ===================================================== */
+
+    window.addEventListener(
+        "pointerup",
+        function () {
+
+            tracing =
+                false;
+
+            lastX =
+                null;
+
+            lastY =
+                null;
+
+        }
+    );
+
+
+    window.addEventListener(
+        "pointercancel",
+        function () {
+
+            tracing =
+                false;
+
+            lastX =
+                null;
+
+            lastY =
+                null;
+
+        }
+    );
+
+
+    /* =====================================================
+       AFTER TRACE — LOAD NEXT PART
+       ===================================================== */
+
+    function continueOriginalStory() {
+
+
+        /*
+         * Fade the sketch layer out.
+         */
+
+        film.classList.add(
+            "hiding"
+        );
+
+
+        hide(
+            "eyebrow"
+        );
+
+
+        hide(
+            "desc"
+        );
+
+
+        hide(
+            "uline"
+        );
+
+
+        $("title")
+            .classList
+            .remove(
+                "in"
+            );
+
+
+        $("bg1")
+            .classList
+            .remove(
+                "on"
+            );
+
+
+        /*
+         * Move the first sketch/photo
+         * away.
+         */
+
+        sheet1.exit();
+
+
+        /*
+         * Bring in the next memory.
+         */
+
+        setTimeout(
+            function () {
+
+                film.classList.remove(
+                    "hiding"
+                );
+
+
+                sheet2.enter();
+
+            },
+            1500
+        );
+
+
+        /*
+         * Draw second memory.
+         */
+
+        setTimeout(
+            function () {
+
+
+                sheet2.draw(
+
+                    6500,
+
+                    function () {
+
+
+                        $("bg2")
+                            .classList
+                            .add(
+                                "on"
+                            );
+
+
+                        sheet2.paint(
+
+                            4000,
+
+                            function () {
+
+                                sheet2.doodles();
+
+                            }
+
+                        );
+
+                    }
+
+                );
+
+            },
+            2500
+        );
+
+
+        /*
+         * Second memory text.
+         */
+
+        setTimeout(
+            function () {
+
+                show(
+                    "m1"
+                );
+
+            },
+            3500
+        );
+
+
+        setTimeout(
+            function () {
+
+                show(
+                    "m2"
+                );
+
+            },
+            6500
+        );
+
+
+        /*
+         * Continue button.
+
+         */
+
+        setTimeout(
+            function () {
+
+                film.classList.add(
+                    "show-continue"
+                );
+
+            },
+            13500
+        );
+
+    }
+
+
+    /* =====================================================
+       PLAY CHAPTER
+       ===================================================== */
 
     function play() {
 
-        // 0.3  the lights come up, the bars open
-        at(0.3, function () { film.classList.add("open", "running"); });
-        at(2.4, function () { film.classList.add("show-chapter"); });
 
-        // 1.6  the first sheet of paper lands
-        at(1.6, function () { sheet1.enter(); });
+        /*
+         * Open film.
+         */
 
-        // 2.4  the pencil starts, and the words arrive while it draws
-        at(2.6, function () {
-            sheet1.draw(8000, function () {
+        at(
+            .3,
 
-                // colour blooms into the drawing
-                $("bg1").classList.add("on");
-                film.classList.add("painting");
+            function () {
 
-                sheet1.paint(4500, function () { sheet1.doodles(); });
-            });
-        });
+                film.classList.add(
+                    "open",
+                    "running"
+                );
 
-        at(3.4,  function () { show("eyebrow"); });
-        at(4.4,  function () { show("title"); $("title").classList.add("in"); });
-        at(6.0,  function () { show("uline"); });
-        at(7.2,  function () { show("desc"); });
+            }
+        );
 
-        // 19.5  the first photograph is tossed aside
-        at(19.5, function () {
-            film.classList.add("hiding");
-            hide("eyebrow"); hide("desc"); hide("uline");
-            $("title").classList.remove("in");
-            $("bg1").classList.remove("on");
-            sheet1.exit();
-        });
 
-        // 21  the second one lands
-        at(21.0, function () { film.classList.remove("hiding"); sheet2.enter(); });
+        /*
+         * Chapter number.
+         */
 
-        at(22.0, function () {
-            sheet2.draw(6500, function () {
-                $("bg2").classList.add("on");
-                sheet2.paint(4000, function () { sheet2.doodles(); });
-            });
-        });
+        at(
+            2.4,
 
-        // the second line
-        at(23.0, function () { show("m1"); });
-        at(26.0, function () { show("m2"); });
+            function () {
 
-        // 34  the way forward
-        at(34.0, function () { film.classList.add("show-continue"); });
+                film.classList.add(
+                    "show-chapter"
+                );
+
+            }
+        );
+
+
+        /*
+         * FIRST:
+         *
+         * Bring in the SKETCH.
+         */
+
+        at(
+            1.6,
+
+            function () {
+
+                sheet1.enter();
+
+            }
+        );
+
+
+        /*
+         * SECOND:
+         *
+         * Draw the sketch.
+         */
+
+        at(
+            2.6,
+
+            function () {
+
+
+                sheet1.draw(
+
+                    8000,
+
+                    function () {
+
+
+                        /*
+                         * =====================================
+                         *
+                         * THE SKETCH IS NOW COMPLETE.
+                         *
+                         * STOP HERE.
+                         *
+                         * =====================================
+                         */
+
+
+                        /*
+                         * DO NOT show the real photograph
+                         * as a separate automatic transition.
+                         *
+                         * Instead, activate the tracing layer.
+                         */
+
+                        activateMemoryReveal();
+
+
+                        /*
+                         * =====================================
+                         *
+                         * NOW develop the REAL PHOTO
+                         * underneath the tracing paper.
+                         *
+                         * The user still sees the sketch/
+                         * tracing layer.
+                         *
+                         * =====================================
+                         */
+
+                        $("bg1")
+                            .classList
+                            .add(
+                                "on"
+                            );
+
+
+                        film.classList.add(
+                            "painting"
+                        );
+
+
+                        sheet1.paint(
+
+                            4500,
+
+                            function () {
+
+
+                                /*
+                                 * Real photo is now ready
+                                 * underneath the tracing layer.
+                                 *
+                                 * DO NOT automatically reveal it.
+                                 */
+
+                                sheet1.doodles();
+
+
+                            }
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+
+        /*
+         * Story text.
+
+         */
+
+        at(
+            3.4,
+
+            function () {
+
+                show(
+                    "eyebrow"
+                );
+
+            }
+        );
+
+
+        at(
+            4.4,
+
+            function () {
+
+                show(
+                    "title"
+                );
+
+
+                $("title")
+                    .classList
+                    .add(
+                        "in"
+                    );
+
+            }
+        );
+
+
+        at(
+            6.0,
+
+            function () {
+
+                show(
+                    "uline"
+                );
+
+            }
+        );
+
+
+        at(
+            7.2,
+
+            function () {
+
+                show(
+                    "desc"
+                );
+
+            }
+        );
+
     }
 
 
-    /* wait for the photographs so the film never starts on a blank frame */
+    /* =====================================================
+       START
+       ===================================================== */
 
-    var started = false;
+    let started =
+        false;
+
 
     function start() {
-        if (started) return;
-        started = true;
-        requestAnimationFrame(function () { requestAnimationFrame(play); });
+
+
+        if (
+            started
+        ) {
+
+            return;
+
+        }
+
+
+        started =
+            true;
+
+
+        requestAnimationFrame(
+
+            function () {
+
+
+                requestAnimationFrame(
+                    play
+                );
+
+
+            }
+
+        );
+
     }
 
-    Promise.all([sheet1.ready, sheet2.ready]).then(start);
-    setTimeout(start, 5000);                  // slow connection safety net
+
+    /* =====================================================
+       WAIT FOR IMAGES
+       ===================================================== */
+
+    Promise.all(
+
+        [
+
+            sheet1.ready,
+
+            sheet2.ready
+
+        ]
+
+    ).then(
+
+        start
+
+    );
 
 
-    /* =========================================
-       Leaving: the paper fades, the bars close
-    ========================================= */
+    /*
+     * Safety fallback.
+     */
 
-    link.addEventListener("click", function (e) {
-        e.preventDefault();
-        film.classList.add("leaving");
-        setTimeout(function () {
-            window.location.href = link.getAttribute("href");
-        }, 1700);
-    });
+    setTimeout(
+        start,
+        5000
+    );
 
-    window.addEventListener("pageshow", function (e) {
-        if (e.persisted) film.classList.remove("leaving");
-    });
+
+    /* =====================================================
+       CONTINUE BUTTON
+       ===================================================== */
+
+    link.addEventListener(
+        "click",
+        function (event) {
+
+
+            event.preventDefault();
+
+
+            film.classList.add(
+                "leaving"
+            );
+
+
+            setTimeout(
+
+                function () {
+
+
+                    window.location.href =
+                        link.getAttribute(
+                            "href"
+                        );
+
+
+                },
+
+                1700
+
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       BACK/FORWARD CACHE FIX
+       ===================================================== */
+
+    window.addEventListener(
+        "pageshow",
+        function (event) {
+
+
+            if (
+                event.persisted
+            ) {
+
+                film.classList.remove(
+                    "leaving"
+                );
+
+            }
+
+        }
+    );
+
 
 })();
 
 </script>
 
+
+<!-- =====================================================
+     MUSIC
+     ===================================================== -->
+
 <script src="../music.js"></script>
 
+
 </body>
+
 </html>
