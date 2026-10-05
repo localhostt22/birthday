@@ -7,625 +7,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E">
-<title>Chapter I — Before I Knew You</title>
+    <title>Chapter I — Before I Knew You</title>
+
+    <!-- The sketchbook look (note: lowercase file name, it matters on web hosts) -->
+    <script src="../sketch.js"></script>
 
     <style>
 
-        /* =========================
-           RESET
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            background: #000;
-        }
-
-        body {
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            color: #f3eee6;
-            font-family: Georgia, "Times New Roman", serif;
-        }
-
-
-        /* =========================
-           THE THEATRE
-        ========================= */
-
-        .film {
-            --bar: clamp(36px, 9vh, 110px);   /* letterbox bar height */
-
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            height: 100dvh;
-            overflow: hidden;
-            background: radial-gradient(circle at center, #1c1a18 0%, #0b0b0b 55%, #000 100%);
-        }
-
-        .film.leaving {
-            pointer-events: none;
-        }
-
-
-        /* =========================
-           ATMOSPHERE
-           Blurred copy of each photo
-           fills the screen behind the
-           real photograph. The real
-           photo is never cropped.
-        ========================= */
-
-        .backdrop {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            z-index: 0;
-            transition: opacity 1.4s ease;
-        }
-
-        .backdrop img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scale(1.2) translate(calc(var(--px, 0) * -14px), calc(var(--py, 0) * -9px));
-            filter: blur(46px) brightness(0.38) saturate(0.8);
-            opacity: 0;
-            transition: opacity 2.6s ease, transform 1.4s ease-out;
-        }
-
-        .backdrop img.active {
-            opacity: 1;
-        }
-
-
-        /* =========================
-           PHOTOS
-           Same size and framing as the
-           original: portrait, contained,
-           centered. Nothing is stretched
-           or cropped.
-           .camera  = mouse parallax
-           .photo-container = slow push-in
-        ========================= */
-
-        .camera {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            transform: translate(calc(var(--px, 0) * 8px), calc(var(--py, 0) * 5px));
-            transition: transform 1.2s ease-out, opacity 1.4s ease;
-        }
-
-        .photo-container {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
-
-        .film.open .photo-container {
-            animation: push 30s linear forwards;
-        }
-
-        @keyframes push {
-            from { transform: scale(1); }
-            to   { transform: scale(1.045); }
-        }
-
-        .photo {
-            position: absolute;
-            width: auto;
-            height: 76vh;
-            max-width: 70vw;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%) scale(1.03);
-            object-fit: contain;
-            opacity: 0;
-            /* the focus pull: soft -> sharp */
-            filter: brightness(0.68) contrast(1.05) saturate(0.75) blur(14px);
-            transition: opacity 2.6s ease, transform 12s ease-out, filter 3.5s ease;
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
-        }
-
-        .photo.active {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-            filter: brightness(0.68) contrast(1.05) saturate(0.75) blur(0);
-        }
-
-        .photo.gone {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1);
-            filter: brightness(0.68) contrast(1.05) saturate(0.75) blur(0);
-        }
-
-
-        /* =========================
-           LIGHT AND DARK
-        ========================= */
-
-        .cinematic {
-            position: absolute;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.35) 0%,
-                rgba(0, 0, 0, 0.05) 40%,
-                rgba(0, 0, 0, 0.20) 65%,
-                rgba(0, 0, 0, 0.90) 100%
-            );
-        }
-
-        .vignette {
-            position: absolute;
-            inset: 0;
-            z-index: 3;
-            pointer-events: none;
-            background: radial-gradient(
-                ellipse at center,
-                transparent 35%,
-                rgba(0, 0, 0, 0.80) 100%
-            );
-        }
-
-        /* dust floating in the projector light */
-        .dust {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 4s ease;
-            mix-blend-mode: screen;
-        }
-
-        .film.running .dust {
-            opacity: 1;
-        }
-
-
-        /* =========================
-           LETTERBOX
-           The screen opens like a
-           cinema aperture.
-        ========================= */
-
-        .bar {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: calc(50% + 1px);
-            background: #000;
-            z-index: 4;
-            pointer-events: none;
-            transition: height 3.2s cubic-bezier(0.65, 0, 0.35, 1);
-        }
-
-        .bar.top    { top: 0; }
-        .bar.bottom { bottom: 0; }
-
-        .film.open .bar {
-            height: var(--bar);
-        }
-
-        .film.leaving .bar {
-            height: calc(50% + 1px);
-            transition-duration: 1.6s;
-        }
-
-
-        /* =========================
-           EFFECTS
-        ========================= */
-
-        /* anamorphic lens streak */
-        .streak {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 2px;
-            margin-top: -1px;
-            z-index: 6;
-            pointer-events: none;
-            opacity: 0;
-            transform: scaleX(0);
-            mix-blend-mode: screen;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(150, 190, 255, 0) 5%,
-                rgba(195, 218, 255, 0.95) 50%,
-                rgba(150, 190, 255, 0) 95%,
-                transparent 100%
-            );
-            box-shadow: 0 0 18px 4px rgba(140, 180, 255, 0.45);
-        }
-
-        .streak.fire {
-            animation: streak 1.6s ease-out forwards;
-        }
-
-        @keyframes streak {
-            0%   { opacity: 0; transform: scaleX(0); }
-            30%  { opacity: 1; }
-            60%  { opacity: 0.8; transform: scaleX(1); }
-            100% { opacity: 0; transform: scaleX(1.1); }
-        }
-
-        /* warm light leak (film burn) */
-        .leak {
-            position: absolute;
-            inset: -10%;
-            z-index: 6;
-            pointer-events: none;
-            opacity: 0;
-            mix-blend-mode: screen;
-            background:
-                radial-gradient(ellipse 60% 80% at 15% 50%, rgba(255, 170, 80, 0.95) 0%, rgba(255, 100, 40, 0.55) 35%, transparent 70%),
-                radial-gradient(ellipse 40% 60% at 40% 90%, rgba(255, 210, 150, 0.6), transparent 70%);
-        }
-
-        .leak.fire {
-            animation: leak 2.4s ease-in-out forwards;
-        }
-
-        @keyframes leak {
-            0%   { opacity: 0; transform: translateX(-35%); }
-            40%  { opacity: 1; }
-            100% { opacity: 0; transform: translateX(30%); }
-        }
-
-        /* projector flicker */
-        .flicker {
-            position: absolute;
-            inset: 0;
-            z-index: 8;
-            background: #000;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .film.running.fx-flicker .flicker {
-            animation: flicker 5.3s infinite;
-        }
-
-        @keyframes flicker {
-            0%    { opacity: 0; }
-            4%    { opacity: 0.07; }
-            5%    { opacity: 0; }
-            22%   { opacity: 0.04; }
-            23%   { opacity: 0.09; }
-            24%   { opacity: 0.01; }
-            47%   { opacity: 0; }
-            48%   { opacity: 0.06; }
-            50%   { opacity: 0; }
-            71%   { opacity: 0.05; }
-            72%   { opacity: 0; }
-            88%   { opacity: 0.08; }
-            89.5% { opacity: 0.02; }
-            100%  { opacity: 0; }
-        }
-
-        /* film grain */
-        .grain {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            left: -50%;
-            top: -50%;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0.08;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            animation: grainMove 0.25s steps(2) infinite;
-        }
-
-        @keyframes grainMove {
-            0%   { transform: translate(0, 0); }
-            25%  { transform: translate(-2%, 2%); }
-            50%  { transform: translate(2%, -2%); }
-            75%  { transform: translate(1%, 3%); }
-            100% { transform: translate(-2%, -1%); }
-        }
-
-
-        /* =========================
-           STORY LAYER
-           Text sits above the bottom
-           bar. Chapter number and the
-           Continue link live inside
-           the bars, so nothing can
-           ever overlap.
-        ========================= */
-
-        .content {
-            position: relative;
-            z-index: 5;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 0 clamp(25px, 7vw, 100px) calc(var(--bar) + clamp(24px, 5vh, 60px));
-            pointer-events: none;
-            transition: opacity 1s ease;
-        }
-
-        .film.leaving .content {
-            opacity: 0;
-        }
-
-        .film.leaving .camera,
-        .film.leaving .backdrop {
-            opacity: 0;
-        }
-
-        /* title strip in the top bar */
-        .chapter {
-            position: absolute;
-            top: calc(var(--bar) / 2);
-            left: 50%;
-            transform: translate(-50%, -50%);
-            white-space: nowrap;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 9px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: rgba(243, 238, 230, 0.6);
-            opacity: 0;
-            transition: opacity 3s ease, letter-spacing 4s ease;
-        }
-
-        .film.show-chapter .chapter {
-            opacity: 1;
-            letter-spacing: 9px;
-        }
+        /* Everything shared (film, bars, lamp, dust, sheet, pencil, text styles)
+           comes from sketch.js. Only this chapter's layout lives here. */
 
         .stage {
-            position: relative;
-            width: 100%;
-        }
-
-        .text {
-            max-width: 650px;
-            transition: opacity 1.8s ease;
-        }
-
-        .eyebrow {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 9px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: rgba(243, 238, 230, 0.55);
-            margin-bottom: 20px;
-        }
-
-        .title {
-            font-size: clamp(40px, 6vw, 82px);
-            font-weight: 400;
-            line-height: 1;
-            color: #f3eee6;
-            text-shadow: 0 3px 25px rgba(0, 0, 0, 0.75);
-        }
-
-        .description {
-            max-width: 520px;
-            margin-top: 24px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 13px;
-            line-height: 1.8;
-            letter-spacing: 0.5px;
-            color: rgba(243, 238, 230, 0.62);
-        }
-
-        /* text beats arrive one at a time, soft -> sharp */
-        .eyebrow,
-        .title,
-        .description {
-            opacity: 0;
-            transform: translateY(22px);
-            filter: blur(8px);
-            transition: opacity 2.2s ease, transform 2.2s ease, filter 2.2s ease;
-        }
-
-        .film.show-eyebrow .eyebrow,
-        .film.show-title .title,
-        .film.show-desc .description {
-            opacity: 1;
-            transform: none;
-            filter: blur(0);
-        }
-
-
-        /* =========================
-           SECOND BEAT
-        ========================= */
-
-        .memory-text {
             position: absolute;
-            right: 0;
-            bottom: 0;
-            max-width: 330px;
-            text-align: right;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 11px;
-            line-height: 1.8;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: rgba(243, 238, 230, 0.55);
-            opacity: 0;
-            filter: blur(6px);
-            transition: opacity 2.4s ease, filter 2.4s ease;
-        }
-
-        .film.second .memory-text {
-            opacity: 1;
-            filter: blur(0);
-        }
-
-
-        /* =========================
-           CONTINUE
-           Lives in the bottom bar.
-           Hidden until the scene is
-           finished.
-        ========================= */
-
-        .continue-wrap {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: var(--bar);
-            display: flex;
+            inset: var(--bar) 0;
+            z-index: 8;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             align-items: center;
-            justify-content: center;
+            gap: 4vw;
+            padding: 0 7vw;
             pointer-events: none;
         }
 
-        .continue {
-            display: inline-block;
-            padding-bottom: 6px;
+        .copy {
+            display: grid;
+            max-width: 520px;
+        }
+
+        .copy > div {
+            grid-area: 1 / 1;
+            align-self: center;
+        }
+
+        /* the box the photograph sheet must fit inside */
+        .zone {
+            align-self: stretch;
+            margin: 3vh 0;
+        }
+
+        .memory {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 10px;
-            letter-spacing: 5px;
+            font-size: clamp(13px, 1.5vw, 20px);
+            letter-spacing: 6px;
+            line-height: 2.2;
             text-transform: uppercase;
-            text-decoration: none;
-            color: rgba(243, 238, 230, 0.75);
-            border-bottom: 1px solid rgba(243, 238, 230, 0.35);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition:
-                opacity 2s ease,
-                visibility 0s linear 2s,
-                color 0.4s ease,
-                border-color 0.4s ease;
+            color: #fff3dc;
+            text-shadow: 0 0 30px rgba(255, 170, 90, .35), 0 3px 18px rgba(0, 0, 0, .6);
         }
 
-        .continue span {
-            display: inline-block;
-            transition: transform 0.4s ease;
-        }
+        .memory .gold { color: #ffc65a; display: block; }
 
-        .film.show-continue .continue {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transition:
-                opacity 2s ease,
-                visibility 0s,
-                color 0.4s ease,
-                border-color 0.4s ease;
-        }
+        a.next-chapter { text-decoration: none; }
 
-        .continue:hover,
-        .continue:focus-visible {
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.8);
-            outline: none;
-        }
+        /* two blurred colour washes, one per photograph */
+        .bgi { opacity: 0; }
+        .film.painting .bgi.on { opacity: .55; }
+        .film.painting .bgi:not(.on) { opacity: 0; }
 
-        .continue:hover span,
-        .continue:focus-visible span {
-            transform: translateX(6px);
-        }
-
-
-        /* =========================
-           WIDE SCREENS
-           Photo stays centered. Text
-           sits in the dark space to
-           its left, the second line
-           in the space to its right.
-        ========================= */
-
-        @media (min-width: 900px) and (min-aspect-ratio: 5/4) {
-
-            .text,
-            .memory-text {
-                max-width: max(260px, calc(50vw - 23vh - clamp(25px, 7vw, 100px) - 3vw));
+        @media (max-width: 760px) {
+            .stage {
+                grid-template-columns: 1fr;
+                grid-template-rows: minmax(0, 1fr) auto;
+                gap: 2vh;
+                padding: 1vh 7vw;
             }
-
-            .title {
-                font-size: clamp(34px, 4.4vw, 66px);
-            }
-        }
-
-
-        /* =========================
-           NARROW / PORTRAIT SCREENS
-           Photo keeps its proportions.
-           The second line replaces the
-           first block in the same spot.
-        ========================= */
-
-        @media not all and (min-width: 900px), not all and (min-aspect-ratio: 5/4) {
-
-            .photo {
-                height: 72vh;
-                max-width: 85vw;
-            }
-
-            .title {
-                font-size: clamp(38px, 11vw, 52px);
-            }
-
-            .description {
-                font-size: 12px;
-            }
-
-            .memory-text {
-                left: 0;
-                right: auto;
-                text-align: left;
-                max-width: 320px;
-                font-size: 12px;
-                letter-spacing: 3px;
-            }
-
-            .film.second .text {
-                opacity: 0;
-            }
-
-            .film.show-chapter .chapter {
-                letter-spacing: 6px;
-            }
-        }
-
-
-        /* =========================
-           REDUCED MOTION
-        ========================= */
-
-        @media (prefers-reduced-motion: reduce) {
-
-            .film.open .photo-container,
-            .grain {
-                animation: none;
-            }
-
-            .photo,
-            .photo.active,
-            .photo.gone {
-                transition: opacity 1s ease;
-            }
+            .zone { order: -1; margin: 1vh 0; }
+            .copy { max-width: none; min-height: 30vh; }
+            .title { font-size: clamp(32px, 9vw, 48px); }
+            .desc { font-size: 13px; line-height: 1.7; margin-top: 16px; }
+            .memory { letter-spacing: 3px; }
         }
 
     </style>
@@ -637,83 +87,68 @@
 
 <div class="film" id="film">
 
-    <!-- Atmosphere: blurred copies, behind the photograph -->
+    <!-- The colour of each photograph seeps into the room -->
     <div class="backdrop" aria-hidden="true">
-        <img src="../assets/photos/childhood-1.jpg" id="bg1" alt="">
-        <img src="../assets/photos/childhood-2.jpg" id="bg2" alt="">
+        <img class="bgi" id="bg1" src="../assets/photos/childhood-1.jpg" alt="">
+        <img class="bgi" id="bg2" src="../assets/photos/childhood-2.jpg" alt="">
     </div>
 
-    <!-- The photographs themselves -->
-    <div class="camera">
-        <div class="photo-container">
-
-            <img
-                src="../assets/photos/childhood-1.jpg"
-                class="photo"
-                id="photo1"
-                alt="Saniya as a child"
-            >
-
-            <img
-                src="../assets/photos/childhood-2.jpg"
-                class="photo"
-                id="photo2"
-                alt="Saniya growing up"
-            >
-
-        </div>
-    </div>
-
-    <div class="cinematic"></div>
-    <div class="vignette"></div>
+    <div class="lamp"></div>
     <canvas class="dust" id="dust" aria-hidden="true"></canvas>
 
-    <!-- Letterbox -->
+    <!-- The sketched photographs are drawn into this layer -->
+    <div class="layer" id="layer"></div>
+
+    <div class="vignette"></div>
     <div class="bar top"></div>
     <div class="bar bottom"></div>
 
-    <div class="content">
+    <div class="stage">
 
-        <div class="chapter">CHAPTER I</div>
+        <div class="copy">
 
-        <div class="stage">
+            <div id="t1">
+                <div class="eyebrow pop" id="eyebrow">A LONG TIME AGO</div>
 
-            <div class="text">
+                <h1 class="title" id="title"></h1>
 
-                <div class="eyebrow">A LONG TIME AGO</div>
+                <svg class="uline" id="uline" viewBox="0 0 380 16" aria-hidden="true">
+                    <path pathLength="1" d="M4 10 C 90 2, 180 14, 260 6 S 350 8, 376 5"/>
+                </svg>
 
-                <h1 class="title">
-                    She was<br>
-                    just a little girl.
-                </h1>
-
-                <p class="description">
+                <p class="desc pop" id="desc">
                     Long before I knew her name,
                     before I knew her smile,
                     before I knew that one day
                     she would mean so much to me...
                 </p>
-
             </div>
 
-            <div class="memory-text">
-                SOMEWHERE ALONG THE WAY...<br>
-                SHE STARTED GROWING UP.
+            <div id="t2">
+                <div class="memory">
+                    <span class="pop" id="m1">Somewhere along the way...</span>
+                    <span class="pop gold" id="m2">She started growing up.</span>
+                </div>
             </div>
 
         </div>
 
+        <div class="zone" id="zone"></div>
+
+    </div>
+
+    <div class="content">
+
+        <div class="chapter-number">CHAPTER I</div>
+
         <div class="continue-wrap">
-            <a class="continue" id="continueLink" href="chapter2.html">
+            <a class="next-chapter" id="continueLink" href="chapter2.html">
                 Continue the story <span>→</span>
             </a>
         </div>
 
     </div>
 
-    <div class="streak" id="streak"></div>
-    <div class="leak" id="leak"></div>
-    <div class="flicker"></div>
     <div class="grain"></div>
 
 </div>
@@ -723,250 +158,140 @@
 
 (function () {
 
-    /* =========================================
-       EFFECTS — switch any of these off (false)
-       if you ever want it calmer
-    ========================================= */
+    var film  = document.getElementById("film");
+    var link  = document.getElementById("continueLink");
+    var $     = function (id) { return document.getElementById(id); };
+    var show  = function (id) { $(id).classList.add("in"); };
+    var hide  = function (id) { $(id).classList.remove("in"); };
 
-    const FX = {
-        dust:      true,   // floating specks in the light
-        scratches: true,   // occasional film scratches
-        flicker:   true,   // projector flicker
-        leak:      true,   // warm light leak between photos
-        streak:    true,   // blue lens streak
-        parallax:  true    // photo drifts slightly with the mouse
-    };
+    /* ---- safety net: if sketch.js ever fails to load, the chapter
+            still plays as a simple, readable page ---- */
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) Object.keys(FX).forEach(k => FX[k] = false);
+    var BF = window.BFSketch;
 
-    const speed = reduce ? 0.5 : 1;
-
-    const film   = document.getElementById("film");
-    const photo1 = document.getElementById("photo1");
-    const photo2 = document.getElementById("photo2");
-    const bg1    = document.getElementById("bg1");
-    const bg2    = document.getElementById("bg2");
-    const link   = document.getElementById("continueLink");
-    const streak = document.getElementById("streak");
-    const leak   = document.getElementById("leak");
-
-    if (FX.flicker) film.classList.add("fx-flicker");
-
-    function at(seconds, fn) {
-        setTimeout(fn, seconds * 1000 * speed);
+    if (!BF) {
+        $("title").textContent = "She was just a little girl.";
+        film.classList.add("open", "running", "show-chapter", "show-continue");
+        ["eyebrow", "desc", "title", "uline"].forEach(show);
+        $("title").classList.add("in");
+        return;
     }
 
-    function fire(el) {
-        el.classList.remove("fire");
-        void el.offsetWidth;          // restart the animation
-        el.classList.add("fire");
-    }
+    var SP = BF.speed;                        // 0.25 with ?fast on the address
+    function at(s, fn) { setTimeout(fn, s * 1000 * SP); }
 
+    BF.words($("title"), "She was just a little girl.");
 
-    /* =========================================
-       DUST
-    ========================================= */
+    var layer = $("layer");
+    var zone  = $("zone");
 
-    function startDust() {
+    if (!BF.reduce) BF.dust($("dust"));
 
-        const canvas = document.getElementById("dust");
-        const ctx = canvas.getContext("2d");
-        let w = 0, h = 0;
-        const parts = [];
+    /* the two photographs, each with its own little doodles */
 
-        function resize() {
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            w = canvas.clientWidth;
-            h = canvas.clientHeight;
-            canvas.width = w * dpr;
-            canvas.height = h * dpr;
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        }
+    var sheet1 = BF.sheet(layer, zone, "../assets/photos/childhood-1.jpg", {
+        rot: -2.2, exit: -1, alt: "Saniya as a child",
+        doodles: [
+            { shape: "heart", x: 101, y: 5,  s: 46, c: "coral", r: 12,  d: 0.1 },
+            { shape: "star",  x: -2,  y: 94, s: 38, c: "gold",  r: -10, d: 0.5 },
+            { shape: "spark", x: 103, y: 90, s: 32, c: "cream", r: 0,   d: 0.9 }
+        ]
+    });
 
-        function make(initial) {
-            return {
-                x: Math.random() * w,
-                y: initial ? Math.random() * h : h + 10,
-                r: 0.4 + Math.random() * 1.6,
-                vx: (Math.random() - 0.5) * 0.12,
-                vy: -(0.03 + Math.random() * 0.16),
-                a: 0.1 + Math.random() * 0.35,
-                p: Math.random() * 6.28,
-                s: 0.4 + Math.random() * 1.2,
-                glow: Math.random() < 0.2
-            };
-        }
-
-        resize();
-        window.addEventListener("resize", resize);
-
-        const count = w < 700 ? 35 : 70;
-        for (let i = 0; i < count; i++) parts.push(make(true));
-
-        function frame(t) {
-            ctx.clearRect(0, 0, w, h);
-
-            for (let i = 0; i < parts.length; i++) {
-                const p = parts[i];
-
-                p.x += p.vx + Math.sin(t / 4000 * p.s + p.p) * 0.05;
-                p.y += p.vy;
-
-                if (p.y < -10) parts[i] = make(false);
-
-                const alpha = p.a * (0.6 + 0.4 * Math.sin(t / 900 * p.s + p.p));
-
-                ctx.beginPath();
-                ctx.fillStyle = "rgba(255, 240, 215, " + alpha + ")";
-
-                if (p.glow) {
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = "rgba(255, 230, 190, 0.6)";
-                } else {
-                    ctx.shadowBlur = 0;
-                }
-
-                ctx.arc(p.x, p.y, p.r, 0, 6.2832);
-                ctx.fill();
-            }
-
-            requestAnimationFrame(frame);
-        }
-
-        requestAnimationFrame(frame);
-    }
-
-
-    /* =========================================
-       FILM SCRATCHES
-    ========================================= */
-
-    function scratchLoop() {
-        setTimeout(function () {
-
-            const s = document.createElement("div");
-            const tall = 60 + Math.random() * 40;
-
-            s.style.cssText =
-                "position:absolute;z-index:8;pointer-events:none;width:1px;" +
-                "left:" + (Math.random() * 100) + "%;" +
-                "top:" + (Math.random() * (100 - tall)) + "%;" +
-                "height:" + tall + "%;" +
-                "background:rgba(255,255,255," + (0.12 + Math.random() * 0.15) + ");";
-
-            film.appendChild(s);
-            setTimeout(function () { s.remove(); }, 90);
-
-            scratchLoop();
-
-        }, 1500 + Math.random() * 2500);
-    }
-
-
-    /* =========================================
-       MOUSE PARALLAX
-    ========================================= */
-
-    if (FX.parallax) {
-        window.addEventListener("mousemove", function (e) {
-            film.style.setProperty("--px", (e.clientX / window.innerWidth - 0.5) * 2);
-            film.style.setProperty("--py", (e.clientY / window.innerHeight - 0.5) * 2);
-        });
-    }
+    var sheet2 = BF.sheet(layer, zone, "../assets/photos/childhood-2.jpg", {
+        rot: 1.8, exit: 1, alt: "Saniya growing up",
+        doodles: [
+            { shape: "spark", x: -3,  y: 6,  s: 40, c: "gold",  r: 0,  d: 0.1 },
+            { shape: "heart", x: 102, y: 95, s: 44, c: "pink",  r: -8, d: 0.5 },
+            { shape: "loop",  x: 100, y: 3,  s: 46, c: "cream", r: 10, d: 0.9 }
+        ]
+    });
 
 
     /* =========================================
        THE SCENE (seconds)
     ========================================= */
 
-    function playScene() {
+    function play() {
 
-        // 0.2   a thin line of light
-        at(0.2, function () { if (FX.streak) fire(streak); });
+        // 0.3  the lights come up, the bars open
+        at(0.3, function () { film.classList.add("open", "running"); });
+        at(2.4, function () { film.classList.add("show-chapter"); });
 
-        // 1.1   the aperture opens, the picture comes into focus
-        at(1.1, function () {
-            film.classList.add("open", "running");
-            photo1.classList.add("active");
-            bg1.classList.add("active");
+        // 1.6  the first sheet of paper lands
+        at(1.6, function () { sheet1.enter(); });
 
-            if (FX.dust) startDust();
-            if (FX.scratches) scratchLoop();
+        // 2.4  the pencil starts, and the words arrive while it draws
+        at(2.6, function () {
+            sheet1.draw(8000, function () {
+
+                // colour blooms into the drawing
+                $("bg1").classList.add("on");
+                film.classList.add("painting");
+
+                sheet1.paint(4500, function () { sheet1.doodles(); });
+            });
         });
 
-        // 3.8   chapter title in the top bar
-        at(3.8, function () { film.classList.add("show-chapter"); });
+        at(3.4,  function () { show("eyebrow"); });
+        at(4.4,  function () { show("title"); $("title").classList.add("in"); });
+        at(6.0,  function () { show("uline"); });
+        at(7.2,  function () { show("desc"); });
 
-        // 6 - 9   the words arrive
-        at(6.0, function () { film.classList.add("show-eyebrow"); });
-        at(7.0, function () { film.classList.add("show-title"); });
-        at(9.0, function () { film.classList.add("show-desc"); });
-
-        // 13   light leak sweeps in
-        at(13.0, function () {
-            if (FX.leak) fire(leak);
-            if (FX.streak) fire(streak);
+        // 19.5  the first photograph is tossed aside
+        at(19.5, function () {
+            film.classList.add("hiding");
+            hide("eyebrow"); hide("desc"); hide("uline");
+            $("title").classList.remove("in");
+            $("bg1").classList.remove("on");
+            sheet1.exit();
         });
 
-        // 14   at the peak of the leak, the photograph changes
-        at(14.0, function () {
-            photo1.classList.remove("active");
-            photo1.classList.add("gone");
-            bg1.classList.remove("active");
+        // 21  the second one lands
+        at(21.0, function () { film.classList.remove("hiding"); sheet2.enter(); });
 
-            photo2.classList.add("active");
-            bg2.classList.add("active");
+        at(22.0, function () {
+            sheet2.draw(6500, function () {
+                $("bg2").classList.add("on");
+                sheet2.paint(4000, function () { sheet2.doodles(); });
+            });
         });
 
-        // 16.2  the second line
-        at(16.2, function () { film.classList.add("second"); });
+        // the second line
+        at(23.0, function () { show("m1"); });
+        at(26.0, function () { show("m2"); });
 
-        // 20.5  pause, then the way forward
-        at(20.5, function () { film.classList.add("show-continue"); });
+        // 34  the way forward
+        at(34.0, function () { film.classList.add("show-continue"); });
     }
 
 
-    /* =========================================
-       Wait for the photographs so the film
-       never starts on a blank frame
-    ========================================= */
+    /* wait for the photographs so the film never starts on a blank frame */
 
-    function loaded(img) {
-        return new Promise(function (resolve) {
-            if (img.complete) return resolve();
-            img.addEventListener("load", resolve, { once: true });
-            img.addEventListener("error", resolve, { once: true });
-        });
-    }
-
-    let started = false;
+    var started = false;
 
     function start() {
         if (started) return;
         started = true;
-        requestAnimationFrame(function () { requestAnimationFrame(playScene); });
+        requestAnimationFrame(function () { requestAnimationFrame(play); });
     }
 
-    Promise.all([loaded(photo1), loaded(photo2)]).then(start);
-    setTimeout(start, 4000);      // safety net on slow connections
+    Promise.all([sheet1.ready, sheet2.ready]).then(start);
+    setTimeout(start, 5000);                  // slow connection safety net
 
 
     /* =========================================
-       Leaving: light burn, aperture closes,
-       then Chapter II
+       Leaving: the paper fades, the bars close
     ========================================= */
 
     link.addEventListener("click", function (e) {
         e.preventDefault();
-        if (FX.leak) fire(leak);
         film.classList.add("leaving");
         setTimeout(function () {
             window.location.href = link.getAttribute("href");
-        }, 1900);
+        }, 1700);
     });
 
-    // coming back with the browser Back button
     window.addEventListener("pageshow", function (e) {
         if (e.persisted) film.classList.remove("leaving");
     });
@@ -978,5 +303,4 @@
 <script src="../music.js"></script>
 
 </body>
-
 </html>
